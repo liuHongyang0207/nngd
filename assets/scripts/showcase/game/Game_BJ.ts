@@ -33,7 +33,7 @@ export default class NewClass extends cc.Component {
         //动态引入背景图
         // this.bg.spriteFrame = this.bg_img[bg_num];
         this._sprite = this.getComponent(ResSprite);
-        this._sprite.spriteFrame = this.spriteFrameList[0];
+        this._sprite.spriteFrame = this.spriteFrameList[bg_num];
     }
 
     // update (dt) {}

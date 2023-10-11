@@ -38,5 +38,7 @@ export const DirUrl = {
 
     AUDIO: "audio/",
 
-    BJ: "img/BJ/"
+    BJ: "img/BJ/",
+
+    GD:"img/gd/"
 }
