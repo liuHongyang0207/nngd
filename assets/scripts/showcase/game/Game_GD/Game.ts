@@ -1,20 +1,20 @@
-import Layer from "../../common/cmpt/base/Layer";
-import { DirUrl, ResUrl } from "../../common/const/Url";
-import { eventsOnLoad } from "../../common/util/Events";
-import Res from "../../common/util/Res";
-import DlgAnimValue from "../dialog/DlgAnimValue";
-import DlgAudio from "../dialog/DlgAudio";
-import DlgCircleList from "../dialog/DlgCircleList";
-import DlgEvents from "../dialog/DlgEvents";
-import DlgI18N from "../dialog/DlgI18N";
-import DlgLayer from "../dialog/DlgLayer";
-import DlgLoopList from "../dialog/DlgLoopList";
-import DlgMultiTexture from "../dialog/DlgMultiTexture";
-import DlgShader from "../dialog/DlgShader";
-import DlgShake from "../dialog/DlgShake";
-import DlgTimer from "../dialog/DlgTimer";
-import DlgVirtualList from "../dialog/DlgVirtualList";
-import DlgVirtualList2 from "../dialog/DlgVirtualList2";
+import Layer from "../../../common/cmpt/base/Layer";
+import { DirUrl, ResUrl } from "../../../common/const/Url";
+import { eventsOnLoad } from "../../../common/util/Events";
+import Res from "../../../common/util/Res";
+import DlgAnimValue from "../../dialog/DlgAnimValue";
+import DlgAudio from "../../dialog/DlgAudio";
+import DlgCircleList from "../../dialog/DlgCircleList";
+import DlgEvents from "../../dialog/DlgEvents";
+import DlgI18N from "../../dialog/DlgI18N";
+import DlgLayer from "../../dialog/DlgLayer";
+import DlgLoopList from "../../dialog/DlgLoopList";
+import DlgMultiTexture from "../../dialog/DlgMultiTexture";
+import DlgShader from "../../dialog/DlgShader";
+import DlgShake from "../../dialog/DlgShake";
+import DlgTimer from "../../dialog/DlgTimer";
+import DlgVirtualList from "../../dialog/DlgVirtualList";
+import DlgVirtualList2 from "../../dialog/DlgVirtualList2";
 
 const { ccclass, property } = cc._decorator;
 

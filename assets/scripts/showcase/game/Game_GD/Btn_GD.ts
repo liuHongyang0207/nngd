@@ -8,11 +8,11 @@
 import Prefab = cc.Prefab;
 import SpriteFrame = cc.SpriteFrame;
 import EventTouch = cc.Event.EventTouch;
-import Res from "../../common/util/Res";
+import Res from "../../../common/util/Res";
 import randomRange = cc.randomRange;
-import {DirUrl} from "../../common/const/Url";
+import {DirUrl} from "../../../common/const/Url";
 import Sprite = cc.Sprite;
-import ResSprite from "../../common/cmpt/ui/res/ResSprite";
+import ResSprite from "../../../common/cmpt/ui/res/ResSprite";
 import requireComponent = cc._decorator.requireComponent;
 import SpriteAtlas = cc.SpriteAtlas;
 

@@ -1,9 +1,9 @@
-import Res from "../../common/util/Res";
-import {DirUrl} from "../../common/const/Url";
-import ResSprite from "../../common/cmpt/ui/res/ResSprite";
+import Res from "../../../common/util/Res";
+import {DirUrl} from "../../../common/const/Url";
+import ResSprite from "../../../common/cmpt/ui/res/ResSprite";
 import requireComponent = cc._decorator.requireComponent;
 import SpriteFrame = cc.SpriteFrame;
-import {CommonData} from "../../common/const/CommonData";
+import {CommonData} from "../../../common/const/CommonData";
 
 const {ccclass, property} = cc._decorator;
 

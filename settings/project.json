@@ -9,6 +9,17 @@
     ]
   ],
   "excluded-modules": [
+    "Collider",
+    "Dynamic Atlas",
+    "DragonBones",
+    "Intersection",
+    "Native Socket",
+    "Physics",
+    "ParticleSystem",
+    "RichText",
+    "Spine Skeleton",
+    "TiledMap",
+    "VideoPlayer",
     "3D",
     "3D Primitive",
     "3D Physics/cannon.js",
