@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>frames</key>
+        <dict>
+            <key>7-min.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{512,512}</string>
+                <key>spriteSourceSize</key>
+                <string>{512,512}</string>
+                <key>textureRect</key>
+                <string>{{1,1},{512,512}}</string>
+                <key>textureRotated</key>
+                <false/>
+                <key>triangles</key>
+                <string>25 26 27 0 25 27 21 23 24 21 22 23 20 21 24 0 1 24 19 20 24 19 12 15 15 18 19 17 18 15 17 15 16 19 24 1 14 15 12 14 12 13 9 11 12 9 10 11 19 1 5 5 8 9 5 7 8 5 6 7 12 5 9 3 4 5 2 3 5 1 2 5 19 5 12 0 24 25</string>
+                <key>vertices</key>
+                <string>208 1 273 24 307 23 343 0 421 1 424 135 484 124 512 171 512 243 470 333 325 512 221 512 162 497 138 509 107 503 51 427 17 402 1 356 0 331 0 229 24 117 18 80 25 11 77 3 141 30 191 1 195 0 203 0</string>
+                <key>verticesUV</key>
+                <string>209 2 274 25 308 24 344 1 422 2 425 136 485 125 513 172 513 244 471 334 326 513 222 513 163 498 139 510 108 504 52 428 18 403 2 357 1 332 1 230 25 118 19 81 26 12 78 4 142 31 192 2 196 1 204 1</string>
+            </dict>
+        </dict>
+        <key>metadata</key>
+        <dict>
+            <key>format</key>
+            <integer>3</integer>
+            <key>pixelFormat</key>
+            <string>RGBA8888</string>
+            <key>premultiplyAlpha</key>
+            <false/>
+            <key>realTextureFileName</key>
+            <string>7.png</string>
+            <key>size</key>
+            <string>{514,514}</string>
+            <key>smartupdate</key>
+            <string>$TexturePacker:SmartUpdate:add32d9ce9a072fd199a5db5917c97e2:7aae4eacff147a633bd448495ade13bf:41a2272e7348b624f834a359c7d08551$</string>
+            <key>textureFileName</key>
+            <string>7.png</string>
+        </dict>
+    </dict>
+</plist>
