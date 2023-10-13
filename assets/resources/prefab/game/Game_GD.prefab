@@ -289,7 +289,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 500,
+      "width": 800,
       "height": 800
     },
     "_anchorPoint": {
@@ -339,10 +339,22 @@
     },
     "bubbleSprites": [
       {
-        "__uuid__": "13a40c31-05e6-4f48-a903-b5c3daf21362"
+        "__uuid__": "bfaf2188-d88f-40e3-8355-39d2a65c8b44"
       },
       {
-        "__uuid__": "d53d3b1e-c252-4050-b9a9-fa847593477c"
+        "__uuid__": "ada32ceb-b674-40e7-954a-755599549745"
+      },
+      {
+        "__uuid__": "8cf729d4-3a32-402a-9375-5208ac72e572"
+      },
+      {
+        "__uuid__": "07216b11-6c7b-4166-9f34-91e955d06bd5"
+      },
+      {
+        "__uuid__": "9048aa17-8cbf-49d7-915b-199d2fea4193"
+      },
+      {
+        "__uuid__": "bafac1b4-4bc5-4773-aebc-f9fe62c5d7b6"
       }
     ],
     "minSpawnInterval": 0.3,

@@ -1,19 +1,9 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/2.4/manual/en/scripting/life-cycle-callbacks.html
 
 import Prefab = cc.Prefab;
-import SpriteFrame = cc.SpriteFrame;
 import EventTouch = cc.Event.EventTouch;
 import Res from "../../../common/util/Res";
-import randomRange = cc.randomRange;
 import {DirUrl} from "../../../common/const/Url";
-import Sprite = cc.Sprite;
 import ResSprite from "../../../common/cmpt/ui/res/ResSprite";
-import requireComponent = cc._decorator.requireComponent;
 import SpriteAtlas = cc.SpriteAtlas;
 
 const {ccclass, property} = cc._decorator;

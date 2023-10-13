@@ -21,13 +21,14 @@ export default class NewClass extends cc.Component {
 
     bubblePool = [];  // 泡泡对象池
 
-    tweens = [];  // 用于存储所有的Tween
+    // tweens = [];  // 用于存储所有的Tween
 
     shsd_01 = 4;  // 上升速度
     shsd_02 = 10;  // 上升速度
 
     start() {
-        this.spawnInterval = cc.randomRange(this.minSpawnInterval, this.maxSpawnInterval);
+        // this.spawnInterval = randomRange(this.minSpawnInterval, this.maxSpawnInterval);
+        this.spawnInterval = this.getRandom(this.minSpawnInterval, this.maxSpawnInterval,false);
         // 在场景切换时销毁所有的泡泡和Tween
         cc.director.on(cc.Director.EVENT_BEFORE_SCENE_LOADING, this.destroyAllBubbles, this);
     }
@@ -37,7 +38,8 @@ export default class NewClass extends cc.Component {
         if (this.spawnTimer >= this.spawnInterval) {
             this.spawnBubble();
             this.spawnTimer = 0;
-            this.spawnInterval = cc.randomRange(this.minSpawnInterval, this.maxSpawnInterval);
+            // this.spawnInterval = randomRange(this.minSpawnInterval, this.maxSpawnInterval);
+            this.spawnInterval = this.getRandom(this.minSpawnInterval, this.maxSpawnInterval,false);
         }
 
         // 回收超出屏幕的泡泡
@@ -51,7 +53,7 @@ export default class NewClass extends cc.Component {
     }
 
     spawnBubble() {
-        let bubble;
+        let bubble: cc.Node;
         if (this.bubblePool.length > 0) {
             bubble = this.bubblePool.pop();
             bubble.active = true;
@@ -60,47 +62,59 @@ export default class NewClass extends cc.Component {
             this.node.addChild(bubble);
         }
         // 随机选择一个精灵图片
-        const spriteIndex = Math.floor(cc.randomRange(0, this.bubbleSprites.length));
+        // const spriteIndex = Math.floor(randomRange(0, this.bubbleSprites.length));
+        const spriteIndex = this.getRandom(0, this.bubbleSprites.length-1,true);
         const spriteFrame = this.bubbleSprites[spriteIndex];
-        const sprite = bubble.getComponentInChildren(cc.Sprite);
+        const sprite = bubble.getComponent(cc.Sprite);
         sprite.spriteFrame = spriteFrame;
 
         // 根据精灵图片设置初始大小
-        bubble.scale = new cc.Vec3(spriteFrame.getOriginalSize().width / 100, spriteFrame.getOriginalSize().height / 100, 1);
+        // let sss = new cc.Vec3(spriteFrame.getOriginalSize().width / 100, spriteFrame.getOriginalSize().height / 100, 1);
+        bubble.scale = new cc.Vec3(spriteFrame.getOriginalSize().width / 100, spriteFrame.getOriginalSize().height / 100, 1).x;
+        // bubble.scale = 1
 
-        bubble.setPosition(cc.v2(cc.randomRange(-this.node.width / 2, this.node.width / 2), -this.node.height / 2));
+        bubble.setPosition(cc.v2(this.getRandom(-this.node.width / 2, this.node.width / 2,false), -this.node.height / 2));
         this.animateBubble(bubble);
     }
 
     animateBubble(bubble) {
         //控制气泡上升速度，值越大，上升越快
-        const duration = cc.randomRange(4, 10);
-        const scale = cc.randomRange(0.5, 1.5);
+        const duration = this.getRandom(4, 10,false);
+        const scale = this.getRandom(0.5, 1.3,false);
+
         const tweenBubble = cc.tween(bubble)
             .parallel(
                 cc.tween().by(duration, { position: new cc.Vec3(0, this.node.height, 0) }, { easing: 'quadInOut' }),
-                cc.tween().to(duration, { scale: new cc.Vec3(scale, scale, 1) }, { easing: 'bounceOut' })
+                cc.tween().to(duration, { scale: scale}, { easing: 'bounceOut' })
             )
             .call(() => {
                 bubble.active = false;
                 this.bubblePool.push(bubble);
+                tweenBubble.stop()
             })
             .start();
-        this.tweens.push(tweenBubble);
+        // this.tweens.push(tweenBubble);
 
     }
 
     destroyAllBubbles() {
         // 停止所有的Tween
-        for (const tween of this.tweens) {
-            tween.stop();
-        }
-        this.tweens = [];
+        // for (const tween of this.tweens) {
+        //     tween.stop();
+        // }
+        // this.tweens = [];
 
         // 销毁所有的泡泡
         for (const bubble of this.bubblePool) {
             bubble.destroy();
         }
         this.bubblePool = [];
+    }
+
+    getRandom(min,max,isFloor){
+        if (isFloor){
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        return Math.random() * (max - min + 1) + min;
     }
 }

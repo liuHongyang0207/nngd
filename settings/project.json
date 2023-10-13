@@ -10,7 +10,6 @@
   ],
   "excluded-modules": [
     "Collider",
-    "Dynamic Atlas",
     "DragonBones",
     "Intersection",
     "Native Socket",

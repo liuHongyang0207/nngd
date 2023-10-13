@@ -3511,7 +3511,7 @@ declare namespace cc {
 		rotationY: number;		
 		/** !#en The local scale relative to the parent.
 		!#zh 节点相对父节点的缩放。 */
-		scale: number;		
+		scale: number;
 		/** !#en Scale on x axis.
 		!#zh 节点 X 轴缩放。 */
 		scaleX: number;		
