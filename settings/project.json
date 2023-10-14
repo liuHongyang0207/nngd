@@ -10,13 +10,11 @@
   ],
   "excluded-modules": [
     "Collider",
-    "DragonBones",
     "Intersection",
     "Native Socket",
     "Physics",
     "ParticleSystem",
     "RichText",
-    "Spine Skeleton",
     "TiledMap",
     "VideoPlayer",
     "3D",

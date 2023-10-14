@@ -1,6 +1,9 @@
 import Res from "../../../util/Res";
 
+
 const { ccclass, menu, disallowMultiple, requireComponent } = cc._decorator;
+
+
 
 /**
  * spine组件，自动管理资源的引用计数
