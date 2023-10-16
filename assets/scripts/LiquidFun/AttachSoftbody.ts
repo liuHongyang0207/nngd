@@ -13,7 +13,7 @@ const {ccclass, property} = cc._decorator;
 export default class AttachSoftbody extends cc.Component
 {
 
-    displayWidth:number=120;
+    displayWidth:number=100;
     // LIFE-CYCLE CALLBACKS:
 
     onLoad ()

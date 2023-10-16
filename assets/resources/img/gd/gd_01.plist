@@ -4,26 +4,26 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>7-min.png</key>
+            <key>gd_01.png</key>
             <dict>
                 <key>aliases</key>
                 <array/>
                 <key>spriteOffset</key>
-                <string>{0,0}</string>
+                <string>{5,0}</string>
                 <key>spriteSize</key>
-                <string>{512,512}</string>
+                <string>{502,512}</string>
                 <key>spriteSourceSize</key>
                 <string>{512,512}</string>
                 <key>textureRect</key>
-                <string>{{1,1},{512,512}}</string>
+                <string>{{1,1},{502,512}}</string>
                 <key>textureRotated</key>
                 <false/>
                 <key>triangles</key>
-                <string>25 26 27 0 25 27 21 23 24 21 22 23 20 21 24 0 1 24 19 20 24 19 12 15 15 18 19 17 18 15 17 15 16 19 24 1 14 15 12 14 12 13 9 11 12 9 10 11 19 1 5 5 8 9 5 7 8 5 6 7 12 5 9 3 4 5 2 3 5 1 2 5 19 5 12 0 24 25</string>
+                <string>2 11 12 9 10 11 2 9 11 9 2 3 6 7 8 6 3 4 6 4 5 3 6 8 9 3 8 1 2 12 0 1 12</string>
                 <key>vertices</key>
-                <string>208 1 273 24 307 23 343 0 421 1 424 135 484 124 512 171 512 243 470 333 325 512 221 512 162 497 138 509 107 503 51 427 17 402 1 356 0 331 0 229 24 117 18 80 25 11 77 3 141 30 191 1 195 0 203 0</string>
+                <string>454 19 484 53 500 101 500 384 512 421 512 512 109 512 45 484 10 408 15 87 36 32 100 0 409 0</string>
                 <key>verticesUV</key>
-                <string>209 2 274 25 308 24 344 1 422 2 425 136 485 125 513 172 513 244 471 334 326 513 222 513 163 498 139 510 108 504 52 428 18 403 2 357 1 332 1 230 25 118 19 81 26 12 78 4 142 31 192 2 196 1 204 1</string>
+                <string>445 20 475 54 491 102 491 385 503 422 503 513 100 513 36 485 1 409 6 88 27 33 91 1 400 1</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -35,13 +35,13 @@
             <key>premultiplyAlpha</key>
             <false/>
             <key>realTextureFileName</key>
-            <string>7.png</string>
+            <string>gd_01.png</string>
             <key>size</key>
-            <string>{514,514}</string>
+            <string>{504,514}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:add32d9ce9a072fd199a5db5917c97e2:7aae4eacff147a633bd448495ade13bf:41a2272e7348b624f834a359c7d08551$</string>
+            <string>$TexturePacker:SmartUpdate:3f5369336173b545d91b60e42f01d965:4dfaa338fe78d69a373d342a307dcf37:869fe73e0b61b888136374bbdb3570fb$</string>
             <key>textureFileName</key>
-            <string>7.png</string>
+            <string>gd_01.png</string>
         </dict>
     </dict>
 </plist>
