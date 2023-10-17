@@ -79,6 +79,7 @@ export default class Layer extends cc.Component {
 
     protected onLoad(): void {
         Layer.inst = this;
+        this.loadingLayer.zIndex = cc.macro.MAX_ZINDEX
         this.hideLoading();
     }
 
