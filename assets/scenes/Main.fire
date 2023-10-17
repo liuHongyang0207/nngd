@@ -78,26 +78,23 @@
         "__id__": 7
       },
       {
-        "__id__": 29
+        "__id__": 30
       },
       {
-        "__id__": 31
+        "__id__": 32
       },
       {
-        "__id__": 33
+        "__id__": 34
       },
       {
-        "__id__": 35
+        "__id__": 36
       },
       {
-        "__id__": 37
+        "__id__": 38
       }
     ],
     "_active": true,
     "_components": [
-      {
-        "__id__": 41
-      },
       {
         "__id__": 42
       },
@@ -109,6 +106,9 @@
       },
       {
         "__id__": 45
+      },
+      {
+        "__id__": 46
       }
     ],
     "_prefab": null,
@@ -325,6 +325,9 @@
     "_components": [
       {
         "__id__": 28
+      },
+      {
+        "__id__": 29
       }
     ],
     "_prefab": null,
@@ -1138,6 +1141,16 @@
     "_id": "6ftf5PQDRP7o3bhiYqsECw"
   },
   {
+    "__type__": "002894ImZZCtYCKFQwS9VCW",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 7
+    },
+    "_enabled": true,
+    "_id": "badJSle3JPzaf2cWzuiUVc"
+  },
+  {
     "__type__": "cc.Node",
     "_name": "Main Camera",
     "_objFlags": 0,
@@ -1148,7 +1161,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 30
+        "__id__": 31
       }
     ],
     "_prefab": null,
@@ -1204,7 +1217,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 29
+      "__id__": 30
     },
     "_enabled": true,
     "_cullingMask": 4294967295,
@@ -1246,7 +1259,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 32
+        "__id__": 33
       }
     ],
     "_prefab": null,
@@ -1302,7 +1315,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 31
+      "__id__": 32
     },
     "_enabled": true,
     "alignMode": 1,
@@ -1335,7 +1348,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 34
+        "__id__": 35
       }
     ],
     "_prefab": null,
@@ -1391,7 +1404,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 33
+      "__id__": 34
     },
     "_enabled": true,
     "alignMode": 1,
@@ -1424,7 +1437,7 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 36
+        "__id__": 37
       }
     ],
     "_prefab": null,
@@ -1480,7 +1493,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 35
+      "__id__": 36
     },
     "_enabled": true,
     "alignMode": 1,
@@ -1513,13 +1526,13 @@
     "_active": true,
     "_components": [
       {
-        "__id__": 38
-      },
-      {
         "__id__": 39
       },
       {
         "__id__": 40
+      },
+      {
+        "__id__": 41
       }
     ],
     "_prefab": null,
@@ -1575,7 +1588,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 37
+      "__id__": 38
     },
     "_enabled": true,
     "alignMode": 1,
@@ -1602,7 +1615,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 37
+      "__id__": 38
     },
     "_enabled": true,
     "_materials": [
@@ -1635,7 +1648,7 @@
     "_name": "",
     "_objFlags": 0,
     "node": {
-      "__id__": 37
+      "__id__": 38
     },
     "_enabled": true,
     "_color": {
@@ -1714,13 +1727,13 @@
       "__id__": 7
     },
     "mainLayer": {
-      "__id__": 31
+      "__id__": 32
     },
     "dialogLayer": {
-      "__id__": 33
+      "__id__": 34
     },
     "tipLayer": {
-      "__id__": 35
+      "__id__": 36
     },
     "_id": "0c/2yuuKhALb4UMZuH4gZe"
   },
@@ -1733,7 +1746,7 @@
     },
     "_enabled": true,
     "dcLab": {
-      "__id__": 39
+      "__id__": 40
     },
     "_id": "68EYGaUuBCFZz4WZ0G+vwb"
   }
