@@ -1,3 +1,5 @@
+import Res from "../../../common/util/Res";
+import {DirUrl} from "../../../common/const/Url";
 
 const {ccclass, property} = cc._decorator;
 
@@ -7,8 +9,11 @@ export default class NewClass extends cc.Component {
     @property(cc.Prefab)
     bubblePrefab = null;  // 泡泡Prefab
 
-    @property([cc.SpriteFrame])
-    bubbleSprites = [];  // 泡泡精灵图片数组
+    // 泡泡精灵图片数组
+    spritesList:cc.SpriteFrame[]
+
+    //泡泡获取完成
+    getPP = false
 
     @property
     minSpawnInterval = 0.3;  // 最小生成间隔
@@ -26,6 +31,12 @@ export default class NewClass extends cc.Component {
     shsd_01 = 4;  // 上升速度
     shsd_02 = 10;  // 上升速度
 
+    onLoad() {
+        this.getGDSprites().then(() => {
+            this.getPP = true
+        })
+    }
+
     start() {
         // this.spawnInterval = randomRange(this.minSpawnInterval, this.maxSpawnInterval);
         this.spawnInterval = this.getRandom(this.minSpawnInterval, this.maxSpawnInterval,false);
@@ -34,6 +45,9 @@ export default class NewClass extends cc.Component {
     }
 
     update(deltaTime) {
+        if (!this.getPP){
+            return
+        }
         this.spawnTimer += deltaTime;
         if (this.spawnTimer >= this.spawnInterval) {
             this.spawnBubble();
@@ -62,9 +76,8 @@ export default class NewClass extends cc.Component {
             this.node.addChild(bubble);
         }
         // 随机选择一个精灵图片
-        // const spriteIndex = Math.floor(randomRange(0, this.bubbleSprites.length));
-        const spriteIndex = this.getRandom(0, this.bubbleSprites.length-1,true);
-        const spriteFrame = this.bubbleSprites[spriteIndex];
+        const spriteIndex = this.getRandom(0, this.spritesList.length-1,true);
+        const spriteFrame = this.spritesList[spriteIndex];
         const sprite = bubble.getComponent(cc.Sprite);
         sprite.spriteFrame = spriteFrame;
 
@@ -116,5 +129,12 @@ export default class NewClass extends cc.Component {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
         return Math.random() * (max - min + 1) + min;
+    }
+
+    async getGDSprites(){
+        debugger
+        this.spritesList = await Res.loadDir(DirUrl.PP, cc.SpriteFrame, false);
+        console.log("11")
+
     }
 }

@@ -1,4 +1,7 @@
 /** 资源缓存基础数据结构 */
+
+import ProgressBar from "../../showcase/loading/ProgressBar";
+
 interface CacheData {
     asset: cc.Asset;
     /** 资源是否需要释放 */
@@ -238,7 +241,10 @@ export default class Res {
                 return;
             }
 
-            bundle.load(parseData.loadUrl, type, (error: Error, resource: T) => {
+            bundle.load(parseData.loadUrl, type, (completedCount: number, totalCount: number, item: any)=> {
+                //加载进度赋值
+                ProgressBar.num = completedCount / totalCount;
+            } ,(error: Error, resource: T) => {
                 if (error) {
                     cc.error(`[Res.load] load error: ${error}`);
                     resolve(null);

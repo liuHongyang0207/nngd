@@ -34,9 +34,9 @@ export interface TipData {
 export default class Layer extends cc.Component {
     public static inst: Layer = null;
 
+    @property(cc.Node) private loadingLayer: cc.Node = null;
     @property(cc.Node) private mainLayer: cc.Node = null;
     @property(cc.Node) private dialogLayer: cc.Node = null;
-    @property(cc.Node) private loadingLayer: cc.Node = null;
     @property(cc.Node) private tipLayer: cc.Node = null;
 
     /** 打开Loading层计数，为0时关闭，防止某些情况同时触发打开关闭Loading */
@@ -70,10 +70,10 @@ export default class Layer extends cc.Component {
                 }
             });
         };
-        checkNode("MainLayer", "DialogLayer", "LoadingLayer", "TipLayer");
+        checkNode("LoadingLayer","MainLayer", "DialogLayer", "TipLayer");
+        this.loadingLayer = this.node.getChildByName("LoadingLayer");
         this.mainLayer = this.node.getChildByName("MainLayer");
         this.dialogLayer = this.node.getChildByName("DialogLayer");
-        this.loadingLayer = this.node.getChildByName("LoadingLayer");
         this.tipLayer = this.node.getChildByName("TipLayer");
     }
 
@@ -368,17 +368,21 @@ export default class Layer extends cc.Component {
         this._loadingCount++;
         if (!this.loadingLayer.active) {
             this.loadingLayer.active = true;
+
             // 默认0.5s后才显示loading内容
-            let content = this.loadingLayer.getChildByName("content");
+            let content = this.loadingLayer.getChildByName("pro_progress");
             if (content) {
-                content.active = false;
+                // content.active = true;
+                // content.active = false;
                 this.unscheduleAllCallbacks();
-                Tool.waitCmpt(this, 0.5).then(() => {
-                    content.active = true;
-                });
+                content.active = true;
+                // Tool.waitCmpt(this, 0.5).then(() => {
+                //     content.active = true;
+                // });
             }
         }
     }
+
 
     /**
      * 关闭全局loading遮罩

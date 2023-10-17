@@ -12,7 +12,7 @@
   "webOrientation": "auto",
   "inlineSpriteFrames": false,
   "inlineSpriteFrames_native": true,
-  "mainCompressionType": "default",
+  "mainCompressionType": "merge_all_json",
   "mainIsRemote": true,
   "optimizeHotUpdate": false,
   "md5Cache": true,

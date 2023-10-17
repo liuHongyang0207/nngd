@@ -40,5 +40,7 @@ export const DirUrl = {
 
     BJ: "img/BJ/",
 
-    GD:"img/gd/"
+    GD:"img/gd/",
+
+    PP:"img/pp/"
 }
