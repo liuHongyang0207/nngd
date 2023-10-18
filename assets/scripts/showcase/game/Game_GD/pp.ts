@@ -132,7 +132,6 @@ export default class NewClass extends cc.Component {
     }
 
     async getGDSprites(){
-        debugger
         this.spritesList = await Res.loadDir(DirUrl.PP, cc.SpriteFrame, false);
         console.log("11")
 

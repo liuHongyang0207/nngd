@@ -28,7 +28,7 @@ export default class NewClass extends cc.Component {
                 console.log("当前为刘海屏");
                 console.log("top："+safeArea.top);
                 const widget = this.node.getComponent(cc.Widget);
-                widget.top = safeArea.top+10
+                widget.top = widget.top - safeArea.top-10
                 widget.isAbsoluteTop = true;
             } else {
                 console.log("当前不是刘海屏");
