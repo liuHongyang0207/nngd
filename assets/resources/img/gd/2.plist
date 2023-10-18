@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>frames</key>
+        <dict>
+            <key>2-min.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{-1,0}</string>
+                <key>spriteSize</key>
+                <string>{510,512}</string>
+                <key>spriteSourceSize</key>
+                <string>{512,512}</string>
+                <key>textureRect</key>
+                <string>{{1,1},{510,512}}</string>
+                <key>textureRotated</key>
+                <false/>
+                <key>triangles</key>
+                <string>0 18 19 14 15 16 13 14 16 13 16 17 3 4 5 8 13 3 10 8 9 10 11 12 10 12 8 12 13 8 8 6 7 6 8 3 1 3 13 6 3 5 1 2 3 1 13 17 0 1 17 0 17 18</string>
+                <key>vertices</key>
+                <string>426 21 510 298 510 369 432 462 427 504 403 512 108 512 95 503 65 445 8 377 0 336 0 305 4 284 31 211 76 6 119 3 158 19 356 13 387 0 394 0</string>
+                <key>verticesUV</key>
+                <string>427 22 511 299 511 370 433 463 428 505 404 513 109 513 96 504 66 446 9 378 1 337 1 306 5 285 32 212 77 7 120 4 159 20 357 14 388 1 395 1</string>
+            </dict>
+        </dict>
+        <key>metadata</key>
+        <dict>
+            <key>format</key>
+            <integer>3</integer>
+            <key>pixelFormat</key>
+            <string>RGBA8888</string>
+            <key>premultiplyAlpha</key>
+            <false/>
+            <key>realTextureFileName</key>
+            <string>2.png</string>
+            <key>size</key>
+            <string>{512,514}</string>
+            <key>smartupdate</key>
+            <string>$TexturePacker:SmartUpdate:b8687e7f390d53c094cb436cc0a1ea8f:4e895d52fe7577b4d976d2f9da072235:623324867643c00c9de7ce2df641103a$</string>
+            <key>textureFileName</key>
+            <string>2.png</string>
+        </dict>
+    </dict>
+</plist>
