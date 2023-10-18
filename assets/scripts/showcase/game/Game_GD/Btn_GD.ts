@@ -58,7 +58,7 @@ export default class NewClass extends cc.Component {
 
         let sprite = bubble.getComponent(cc.Sprite);
         sprite.spriteFrame = this.SpriteFrames[spriteIndex]
-        bubble.setPosition(touchPoint);
+        bubble.setPosition(touchPoint.x,touchPoint.y-60,touchPoint.z);
         this.node.addChild(bubble);
 
 
