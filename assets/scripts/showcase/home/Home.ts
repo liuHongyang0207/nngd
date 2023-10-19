@@ -12,7 +12,9 @@ export default class Home extends cc.Component {
 
 
     private onClickGame() {
+        Layer.inst.showLoading()
         this.getBjData().then(() => {
+            Layer.inst.hideLoadingTwo()
             Layer.inst.enterMain(ResUrl.PREFAB.Game_GD);
         })
     }

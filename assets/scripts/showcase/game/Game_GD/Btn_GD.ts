@@ -24,7 +24,12 @@ export default class NewClass extends cc.Component {
     @property(cc.Node)
     DownNode = null
 
+    @property(cc.Node)
+    GD_YB = null
+
+
     private GD_num = 0;
+    private GD_old = 0;
 
     private _sprite: ResSprite = null;
 
@@ -32,7 +37,12 @@ export default class NewClass extends cc.Component {
 
     onLoad(){
         this.getGDSprites().then(() => {
+            this.GD_YB.active = false
+
             this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
+            this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
+            this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
+            this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
             this.getGD_DD()
         })
     }
@@ -44,10 +54,40 @@ export default class NewClass extends cc.Component {
     // update (dt) {}
 
     onTouchStart (event:EventTouch) {
+        this.GD_YB.active = true
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
-        this.getGD(touchPoint);
+        // this.getGD(touchPoint);
+
+        this.getGD_YB(this.getPositions(touchPoint));
     }
+
+
+    onTouchMove (event:EventTouch) {
+        let touchPoint = event.getLocation();
+        touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
+
+        this.GD_YB.setPosition(this.getPositions(touchPoint).x,330);
+    }
+
+
+    onTouchEnd (event:EventTouch) {
+        this.GD_YB.active = false
+        let touchPoint = event.getLocation();
+        touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
+        touchPoint.y = 330
+        this.getGD(this.getPositions(touchPoint));
+
+    }
+    onTouchCancel (event:EventTouch) {
+        this.GD_YB.active = false
+        let touchPoint = event.getLocation();
+        touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
+        touchPoint.y = 330
+        this.getGD(this.getPositions(touchPoint));
+
+    }
+
 
     getGD(touchPoint) {
         let bubble: cc.Node;
@@ -57,12 +97,22 @@ export default class NewClass extends cc.Component {
         // 随机选择一个精灵图片
 
         let sprite = bubble.getComponent(cc.Sprite);
-        sprite.spriteFrame = this.SpriteFrames[this.GD_num]
-        bubble.setPosition(touchPoint.x,touchPoint.y-60,touchPoint.z);
+        sprite.spriteFrame = this.SpriteFrames[this.GD_old]
+        bubble.setPosition(touchPoint.x,touchPoint.y);
         this.node.addChild(bubble);
 
+        // this.getGD_DD()
+    }
+
+    //预生成的果冻
+    getGD_YB(touchPoint){
+        let sprite = this.GD_YB.getComponent(cc.Sprite);
+        sprite.spriteFrame = this.SpriteFrames[this.GD_num]
+        this.GD_YB.setPosition(touchPoint.x,320);
+        this.GD_old = this.GD_num
         this.getGD_DD()
     }
+
 
     getGD_DD(){
         let min = 0;
@@ -70,7 +120,7 @@ export default class NewClass extends cc.Component {
         this.GD_num = Math.floor(Math.random() * (max - min + 1)) + min;
         let nextNode = this.node.getChildByName("Next");
 
-// 获取Next节点上的gd组件
+        // 获取Next节点上的gd组件
         let gdComponent = nextNode.getComponentInChildren(cc.Sprite);
         gdComponent.spriteFrame = this.SpriteFrames[this.GD_num]
     }
@@ -81,6 +131,17 @@ export default class NewClass extends cc.Component {
         for (let gdSprite of this.GDSprites) {
             this.SpriteFrames.push(gdSprite.getSpriteFrames()[0])
         }
+    }
+
+
+    getPositions(touchPoint){
+        if (touchPoint.x<-225){
+            touchPoint.x = -225
+        }else if (touchPoint.x>230){
+            touchPoint.x = 230
+        }
+
+        return touchPoint
     }
 
 }

@@ -1,6 +1,7 @@
 /** 资源缓存基础数据结构 */
 
 import ProgressBar from "../../showcase/loading/ProgressBar";
+import RequestItem = cc.AssetManager.RequestItem;
 
 interface CacheData {
     asset: cc.Asset;
@@ -240,6 +241,8 @@ export default class Res {
                 resolve(null);
                 return;
             }
+            //加载进度赋值
+            ProgressBar.title = "努力加载页面中...";
 
             bundle.load(parseData.loadUrl, type, (completedCount: number, totalCount: number, item: any)=> {
                 //加载进度赋值
@@ -281,8 +284,12 @@ export default class Res {
                 resolve([]);
                 return;
             }
-
-            bundle.loadDir(parseData.loadUrl, type, (error: Error, resource: T[]) => {
+            //加载进度赋值
+            ProgressBar.title = "努力加载资源中...";
+            bundle.loadDir(parseData.loadUrl, type, (finish: number, total: number, item: RequestItem) =>{
+                //加载进度赋值
+                ProgressBar.num = finish / total;
+            },(error: Error, resource: T[]) => {
                 if (error) {
                     cc.error(`[Res.loadDir] load error: ${error}`);
                     resolve([]);

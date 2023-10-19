@@ -396,4 +396,13 @@ export default class Layer extends cc.Component {
             this.unscheduleAllCallbacks();
         }
     }
+
+
+    public hideLoadingTwo(): void {
+        this._loadingCount--;
+        if (this._loadingCount <= 0) {
+            this._loadingCount = 0;
+            this.unscheduleAllCallbacks();
+        }
+    }
 }
