@@ -105,7 +105,6 @@ export default class Layer extends cc.Component {
             cc.error(`[Layer.enterMain] can not find prefab: ${url}`);
             return null;
         }
-
         this.mainLayer.destroyAllChildren();
         this.closeDialogs();
         this.clearTips();
@@ -371,18 +370,19 @@ export default class Layer extends cc.Component {
         this._loadingCount++;
         if (!this.loadingLayer.active) {
             this.loadingLayer.active = true;
+            this.unscheduleAllCallbacks();
 
             // 默认0.5s后才显示loading内容
-            let content = this.loadingLayer.getChildByName("pro_progress");
-            if (content) {
-                // content.active = true;
-                // content.active = false;
-                this.unscheduleAllCallbacks();
-                content.active = true;
-                // Tool.waitCmpt(this, 0.5).then(() => {
-                //     content.active = true;
-                // });
-            }
+            // let content = this.loadingLayer.getChildByName("pro_progress");
+            // if (content) {
+            //     // content.active = true;
+            //     // content.active = false;
+            //     this.unscheduleAllCallbacks();
+            //     content.active = true;
+            //     // Tool.waitCmpt(this, 0.5).then(() => {
+            //     //     content.active = true;
+            //     // });
+            // }
         }
     }
 

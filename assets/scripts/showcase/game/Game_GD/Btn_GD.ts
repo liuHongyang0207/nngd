@@ -6,6 +6,7 @@ import {DirUrl} from "../../../common/const/Url";
 import ResSprite from "../../../common/cmpt/ui/res/ResSprite";
 import SpriteAtlas = cc.SpriteAtlas;
 import Layer from "../../../common/cmpt/base/Layer";
+import {CommonData} from "../../../common/const/CommonData";
 
 const {ccclass, property} = cc._decorator;
 
@@ -15,9 +16,9 @@ export default class NewClass extends cc.Component {
     @property(Prefab)
     public GDPrefab: Prefab = null;
     // 果冻精灵集数组
-    public GDSprites: SpriteAtlas[] = [];
+    // public GDSprites: SpriteAtlas[] = [];
     //果冻精灵图片数组
-    public SpriteFrames = [];
+    public SpriteFrames =  CommonData.instance.getData("GDSpriteFrames");
     //上部block
     @property(cc.Node)
     DownNode = null
@@ -44,7 +45,7 @@ export default class NewClass extends cc.Component {
 
 
     onLoad(){
-        this.getGDSprites().then(() => {
+        // this.getGDSprites().then(() => {
             this.GD_YB.active = false
 
             this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
@@ -52,7 +53,7 @@ export default class NewClass extends cc.Component {
             this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
             this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
             this.getGD_DD()
-        })
+        // })
     }
 
     start () {
@@ -149,12 +150,12 @@ export default class NewClass extends cc.Component {
     }
 
 
-    async getGDSprites(){
-        this.GDSprites = await Res.loadDir(DirUrl.GD, cc.SpriteAtlas, false);
-        for (let gdSprite of this.GDSprites) {
-            this.SpriteFrames.push(gdSprite.getSpriteFrames()[0])
-        }
-    }
+    // async getGDSprites(){
+    //     this.GDSprites = await Res.loadDir(DirUrl.GD, cc.SpriteAtlas, false);
+    //     for (let gdSprite of this.GDSprites) {
+    //         this.SpriteFrames.push(gdSprite.getSpriteFrames()[0])
+    //     }
+    // }
 
 
     getPositions(touchPoint){

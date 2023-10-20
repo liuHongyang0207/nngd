@@ -241,10 +241,8 @@ export default class Res {
                 resolve(null);
                 return;
             }
-            //加载进度赋值
-            ProgressBar.title = "努力加载页面中...";
-
             bundle.load(parseData.loadUrl, type, (completedCount: number, totalCount: number, item: any)=> {
+                debugger
                 //加载进度赋值
                 ProgressBar.num = completedCount / totalCount;
             } ,(error: Error, resource: T) => {
@@ -285,9 +283,9 @@ export default class Res {
                 return;
             }
             //加载进度赋值
-            ProgressBar.title = "努力加载资源中...";
             bundle.loadDir(parseData.loadUrl, type, (finish: number, total: number, item: RequestItem) =>{
                 //加载进度赋值
+                debugger
                 ProgressBar.num = finish / total;
             },(error: Error, resource: T[]) => {
                 if (error) {
