@@ -344,7 +344,9 @@ export default class Layer extends cc.Component {
             Tool.arrayDelete(this._tipTexts, tipData.text);
         });
         tipNode.active = true;
-        tipNode.opacity = 255;
+        // tipNode.opacity = 255;
+        // tipNode.color = cc.color(49,122,210)
+        tipNode.opacity = 140;
         tipNode.setPosition(tipData.start);
         tipNode.setSiblingIndex(this.tipLayer.childrenCount - 1);
         tipNode.runAction(cc.sequence(delay, cc.spawn(fade, moveTo), call));

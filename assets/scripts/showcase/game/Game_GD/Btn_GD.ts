@@ -5,33 +5,41 @@ import Res from "../../../common/util/Res";
 import {DirUrl} from "../../../common/const/Url";
 import ResSprite from "../../../common/cmpt/ui/res/ResSprite";
 import SpriteAtlas = cc.SpriteAtlas;
+import Layer from "../../../common/cmpt/base/Layer";
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class NewClass extends cc.Component {
-
     // 果冻Prefab
     @property(Prefab)
     public GDPrefab: Prefab = null;
-
-    // 果冻精灵图片数组
+    // 果冻精灵集数组
     public GDSprites: SpriteAtlas[] = [];
-
+    //果冻精灵图片数组
     public SpriteFrames = [];
-
     //上部block
     @property(cc.Node)
     DownNode = null
-
+    //预生成的果冻
     @property(cc.Node)
     GD_YB = null
-
-
+    //果冻精灵，这个是最新的
     private GD_num = 0;
+    //果冻精灵，这个是即将生成的
     private GD_old = 0;
-
-    private _sprite: ResSprite = null;
+    //点击时间间隔
+    private clickInterval: number = 0.4;
+    //上一次点击的时间戳
+    private lastClickTime: number = 0;
+    //定时器数量
+    private count: number = 0;
+    //是否在规定时间内
+    private isTime: boolean = false;
+    //开始点击事件
+    private isStart: boolean = false;
+    //时间对象池
+    private timerPool: cc.NodePool = null;
 
 
 
@@ -48,12 +56,18 @@ export default class NewClass extends cc.Component {
     }
 
     start () {
-
     }
 
     // update (dt) {}
 
     onTouchStart (event:EventTouch) {
+        if (this.isTime){
+            Layer.inst.showTip({ text: "点击太快啦！", end: cc.v2(0, 100), duration: 0 });
+            this.isStart = true
+            return
+        }
+        console.log("点击成功")
+        this.isStart = false
         this.GD_YB.active = true
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
@@ -64,6 +78,10 @@ export default class NewClass extends cc.Component {
 
 
     onTouchMove (event:EventTouch) {
+        if (this.isStart){
+            return
+        }
+        console.log("移动成功")
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
 
@@ -72,6 +90,11 @@ export default class NewClass extends cc.Component {
 
 
     onTouchEnd (event:EventTouch) {
+        if (this.isStart){
+            return
+        }
+        console.log("结束成功")
+        this.getTime()
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
@@ -80,6 +103,11 @@ export default class NewClass extends cc.Component {
 
     }
     onTouchCancel (event:EventTouch) {
+        if (this.isStart){
+            return
+        }
+        console.log("移除成功")
+        this.getTime()
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
@@ -92,16 +120,11 @@ export default class NewClass extends cc.Component {
     getGD(touchPoint) {
         let bubble: cc.Node;
         bubble = cc.instantiate(this.GDPrefab);
-        //将 UI 坐标系下的触点位置转换到当前节点坐标系下的触点位置
-        // let v3_touchstart = this.parentBlocks.getComponent(UITransform).convertToNodeSpaceAR(new Vec3(v2_touchstart.x,v2_touchstart.y,0))
         // 随机选择一个精灵图片
-
         let sprite = bubble.getComponent(cc.Sprite);
         sprite.spriteFrame = this.SpriteFrames[this.GD_old]
         bubble.setPosition(touchPoint.x,touchPoint.y);
         this.node.addChild(bubble);
-
-        // this.getGD_DD()
     }
 
     //预生成的果冻
@@ -142,6 +165,25 @@ export default class NewClass extends cc.Component {
         }
 
         return touchPoint
+    }
+
+    getTime(){
+
+        this.isTime = true
+        this.scheduleOnce(() => {
+            // 在这里写点击事件的处理逻辑
+            this.isTime = false
+            this.count++;
+            if (this.count > 10) {
+                this.count = 0
+                // 先移除之前的定时器
+                this.unscheduleAllCallbacks();
+            }
+        }, this.clickInterval);
+    }
+
+    onDestroy() {
+        this.unscheduleAllCallbacks()
     }
 
 }

@@ -101,12 +101,12 @@
     "_prefab": {
       "__id__": 9
     },
-    "_opacity": 150,
+    "_opacity": 133,
     "_color": {
       "__type__": "cc.Color",
-      "r": 213,
-      "g": 152,
-      "b": 107,
+      "r": 49,
+      "g": 122,
+      "b": 210,
       "a": 255
     },
     "_contentSize": {
