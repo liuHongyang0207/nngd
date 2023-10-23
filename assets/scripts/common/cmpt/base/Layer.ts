@@ -88,13 +88,6 @@ export default class Layer extends cc.Component {
     }
 
     /**
-     * 获取文件名（截取url最后一个斜杠后的内容）
-     */
-    public getNameByUrl(url: string): string {
-        return url.substring(url.lastIndexOf("/") + 1, url.length);
-    }
-
-    /**
      * 进入常驻界面，并清空dialog与tip（不同于dialog，常驻界面始终显示在最底层，且同时只会存在一个）
      */
     public async enterMain(url: string): Promise<cc.Node | null> {
