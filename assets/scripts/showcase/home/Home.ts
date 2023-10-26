@@ -21,17 +21,14 @@ export default class Home extends cc.Component {
         Layer.inst.showLoading()
         ProgressBar.lab_num = "1 / 3";
         ProgressBar.title = "努力加载背景资源中...";
-        debugger
         this.getBjData().then(() => {
             Layer.inst.hideLoadingTwo()
             ProgressBar.lab_num = "2 / 3";
-            debugger
             ProgressBar.title = "努力加载游戏资源中...";
 
             this.getGDSprites().then(() => {
                 Layer.inst.hideLoadingTwo()
                 ProgressBar.lab_num = "3 / 3";
-                debugger
                 ProgressBar.title = "努力加载页面中...";
 
                 Layer.inst.enterMain(ResUrl.PREFAB.Game_GD);

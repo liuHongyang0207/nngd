@@ -8,6 +8,10 @@ import SpriteAtlas = cc.SpriteAtlas;
 import Layer from "../../../common/cmpt/base/Layer";
 import {CommonData} from "../../../common/const/CommonData";
 
+
+import * as LiquidFun from "../../../Box2D/Common/b2Settings";
+import PhysicManager from "../../../LiquidFun/PhysicManager";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -57,6 +61,31 @@ export default class NewClass extends cc.Component {
     }
 
     start () {
+        this.jt()
+
+    }
+    jt(){
+        // 创建碰撞监听器
+        const contactListener = new LiquidFun.b2ContactListener();
+        contactListener.BeginContact = function(contact) {
+            console.log("处理碰撞开始事件")
+            debugger
+            // 处理碰撞开始事件
+        };
+        contactListener.EndContact = function(contact) {
+            console.log("处理碰撞结束事件")
+            // 处理碰撞结束事件
+        };
+        contactListener.PreSolve = function(contact, oldManifold) {
+            console.log("处理碰撞预处理事件")
+            // 处理碰撞预处理事件
+        };
+        contactListener.PostSolve = function(contact, impulse) {
+            console.log("处理碰撞后处理事件")
+            // 处理碰撞后处理事件
+        };
+
+        PhysicManager.physicWorld.SetContactListener(contactListener);
     }
 
     // update (dt) {}
@@ -99,7 +128,7 @@ export default class NewClass extends cc.Component {
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
-        touchPoint.y = 330
+        touchPoint.y = 420
         this.getGD(this.getPositions(touchPoint));
 
     }
@@ -112,7 +141,7 @@ export default class NewClass extends cc.Component {
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
-        touchPoint.y = 330
+        touchPoint.y = 420
         this.getGD(this.getPositions(touchPoint));
 
     }
@@ -125,14 +154,15 @@ export default class NewClass extends cc.Component {
         let sprite = bubble.getComponent(cc.Sprite);
         sprite.spriteFrame = this.SpriteFrames[this.GD_old]
         bubble.setPosition(touchPoint.x,touchPoint.y);
-        this.node.addChild(bubble);
+        this.DownNode.addChild(bubble);
+
     }
 
     //预生成的果冻
     getGD_YB(touchPoint){
         let sprite = this.GD_YB.getComponent(cc.Sprite);
         sprite.spriteFrame = this.SpriteFrames[this.GD_num]
-        this.GD_YB.setPosition(touchPoint.x,320);
+        this.GD_YB.setPosition(touchPoint.x,330);
         this.GD_old = this.GD_num
         this.getGD_DD()
     }
@@ -150,26 +180,17 @@ export default class NewClass extends cc.Component {
     }
 
 
-    // async getGDSprites(){
-    //     this.GDSprites = await Res.loadDir(DirUrl.GD, cc.SpriteAtlas, false);
-    //     for (let gdSprite of this.GDSprites) {
-    //         this.SpriteFrames.push(gdSprite.getSpriteFrames()[0])
-    //     }
-    // }
-
-
     getPositions(touchPoint){
         if (touchPoint.x<-225){
             touchPoint.x = -225
-        }else if (touchPoint.x>230){
-            touchPoint.x = 230
+        }else if (touchPoint.x>225){
+            touchPoint.x = 225
         }
 
         return touchPoint
     }
 
     getTime(){
-
         this.isTime = true
         this.scheduleOnce(() => {
             // 在这里写点击事件的处理逻辑

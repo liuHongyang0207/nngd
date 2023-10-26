@@ -110,6 +110,8 @@ export default class PhysicManager extends cc.Component
 
         //groupDef.strength=1;
 
+        window.world.CreateBody(groupDef)
+
         //创建物理group对象
         let softBodyGroup=LFParticleSystem.instance.particleSystem.CreateParticleGroup(groupDef);
         console.log("** soft firstIdx="+softBodyGroup.m_firstIndex+" lastIdx="+softBodyGroup.m_lastIndex);

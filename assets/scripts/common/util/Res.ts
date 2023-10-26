@@ -285,7 +285,6 @@ export default class Res {
             //加载进度赋值
             bundle.loadDir(parseData.loadUrl, type, (finish: number, total: number, item: RequestItem) =>{
                 //加载进度赋值
-                debugger
                 ProgressBar.num = finish / total;
             },(error: Error, resource: T[]) => {
                 if (error) {
