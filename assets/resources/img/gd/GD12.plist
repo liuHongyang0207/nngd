@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>frames</key>
+        <dict>
+            <key>gd_12.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{512,512}</string>
+                <key>spriteSourceSize</key>
+                <string>{512,512}</string>
+                <key>textureRect</key>
+                <string>{{1,1},{512,512}}</string>
+                <key>textureRotated</key>
+                <false/>
+                <key>triangles</key>
+                <string>2 7 8 5 6 7 4 7 3 4 5 7 2 3 7 1 2 8 0 1 8</string>
+                <key>vertices</key>
+                <string>512 26 512 492 472 512 36 512 0 476 0 53 29 16 73 0 452 0</string>
+                <key>verticesUV</key>
+                <string>513 27 513 493 473 513 37 513 1 477 1 54 30 17 74 1 453 1</string>
+            </dict>
+        </dict>
+        <key>metadata</key>
+        <dict>
+            <key>format</key>
+            <integer>3</integer>
+            <key>pixelFormat</key>
+            <string>RGBA8888</string>
+            <key>premultiplyAlpha</key>
+            <false/>
+            <key>realTextureFileName</key>
+            <string>GD12.png</string>
+            <key>size</key>
+            <string>{514,514}</string>
+            <key>smartupdate</key>
+            <string>$TexturePacker:SmartUpdate:d20d69a1b68a07af6f8ac3f82f35d5dd:5009fdfd33dae8b82b5afa368fa9503f:b8143f38f61d0e7853c2ff4b3d1b11fc$</string>
+            <key>textureFileName</key>
+            <string>GD12.png</string>
+        </dict>
+    </dict>
+</plist>

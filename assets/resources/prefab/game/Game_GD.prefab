@@ -691,7 +691,7 @@
     "_prefab": {
       "__id__": 36
     },
-    "_opacity": 185,
+    "_opacity": 255,
     "_color": {
       "__type__": "cc.Color",
       "r": 215,
@@ -3517,9 +3517,7 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_spriteFrame": {
-      "__uuid__": "3b36d149-56fa-4e86-ad26-db5f1bb0ae0e"
-    },
+    "_spriteFrame": null,
     "_type": 0,
     "_sizeMode": 0,
     "_fillType": 0,
@@ -3531,9 +3529,7 @@
     "_fillStart": 0,
     "_fillRange": 0,
     "_isTrimmedMode": true,
-    "_atlas": {
-      "__uuid__": "43756675-c612-46d5-86db-36b426157b09"
-    },
+    "_atlas": null,
     "_id": ""
   },
   {

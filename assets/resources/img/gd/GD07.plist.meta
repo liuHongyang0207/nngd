@@ -1,0 +1,98 @@
+{
+  "ver": "1.2.6",
+  "uuid": "fef872ab-c9e9-466b-b837-c6a0df361111",
+  "importer": "asset",
+  "rawTextureUuid": "394a71bb-9c2c-4560-aff1-bd69717af079",
+  "size": {
+    "width": 514,
+    "height": 514
+  },
+  "type": "Texture Packer",
+  "subMetas": {
+    "gd_07.png": {
+      "ver": "1.0.6",
+      "uuid": "1e3728f0-c20f-4ae6-a286-262d0fcb1031",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "394a71bb-9c2c-4560-aff1-bd69717af079",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 1,
+      "trimY": 1,
+      "width": 512,
+      "height": 512,
+      "rawWidth": 512,
+      "rawHeight": 512,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "vertices": {
+        "triangles": [
+          5,
+          6,
+          7,
+          4,
+          5,
+          7,
+          2,
+          4,
+          7,
+          2,
+          3,
+          4,
+          0,
+          1,
+          2,
+          0,
+          2,
+          7
+        ],
+        "x": [
+          512,
+          512,
+          476,
+          31,
+          0,
+          0,
+          36,
+          463
+        ],
+        "y": [
+          39,
+          493,
+          512,
+          512,
+          466,
+          36,
+          0,
+          0
+        ],
+        "u": [
+          513,
+          513,
+          477,
+          32,
+          1,
+          1,
+          37,
+          464
+        ],
+        "v": [
+          40,
+          494,
+          513,
+          513,
+          467,
+          37,
+          1,
+          1
+        ]
+      },
+      "spriteType": "normal",
+      "subMetas": {}
+    }
+  }
+}

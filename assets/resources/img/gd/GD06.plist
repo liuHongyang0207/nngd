@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>frames</key>
+        <dict>
+            <key>gd_06.png</key>
+            <dict>
+                <key>aliases</key>
+                <array/>
+                <key>spriteOffset</key>
+                <string>{0,0}</string>
+                <key>spriteSize</key>
+                <string>{512,512}</string>
+                <key>spriteSourceSize</key>
+                <string>{512,512}</string>
+                <key>textureRect</key>
+                <string>{{1,1},{512,512}}</string>
+                <key>textureRotated</key>
+                <false/>
+                <key>triangles</key>
+                <string>0 7 8 5 6 7 4 5 7 3 4 7 1 2 3 7 0 1 7 1 3</string>
+                <key>vertices</key>
+                <string>512 60 512 465 480 512 57 512 0 455 0 57 39 10 77 0 452 0</string>
+                <key>verticesUV</key>
+                <string>513 61 513 466 481 513 58 513 1 456 1 58 40 11 78 1 453 1</string>
+            </dict>
+        </dict>
+        <key>metadata</key>
+        <dict>
+            <key>format</key>
+            <integer>3</integer>
+            <key>pixelFormat</key>
+            <string>RGBA8888</string>
+            <key>premultiplyAlpha</key>
+            <false/>
+            <key>realTextureFileName</key>
+            <string>GD06.png</string>
+            <key>size</key>
+            <string>{514,514}</string>
+            <key>smartupdate</key>
+            <string>$TexturePacker:SmartUpdate:2ca433df1bf00525295550ef11b06497:302e72131726faebbb8b1e8d42af6fb4:fb61f008aad1ae2633db056d31c64676$</string>
+            <key>textureFileName</key>
+            <string>GD06.png</string>
+        </dict>
+    </dict>
+</plist>

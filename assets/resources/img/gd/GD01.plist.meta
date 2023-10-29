@@ -1,0 +1,98 @@
+{
+  "ver": "1.2.6",
+  "uuid": "5746d3ab-7e06-42f5-9dc5-1004b5350874",
+  "importer": "asset",
+  "rawTextureUuid": "727b4c7c-e189-4e90-8bdb-4ea4f98d5675",
+  "size": {
+    "width": 514,
+    "height": 514
+  },
+  "type": "Texture Packer",
+  "subMetas": {
+    "gd_01.png": {
+      "ver": "1.0.6",
+      "uuid": "50271e8d-25d5-4ee7-9549-733e96b52584",
+      "importer": "sprite-frame",
+      "rawTextureUuid": "727b4c7c-e189-4e90-8bdb-4ea4f98d5675",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 1,
+      "trimY": 1,
+      "width": 512,
+      "height": 512,
+      "rawWidth": 512,
+      "rawHeight": 512,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "vertices": {
+        "triangles": [
+          5,
+          6,
+          7,
+          2,
+          0,
+          1,
+          3,
+          4,
+          5,
+          3,
+          5,
+          0,
+          3,
+          0,
+          2,
+          0,
+          5,
+          7
+        ],
+        "x": [
+          512,
+          512,
+          479,
+          36,
+          0,
+          0,
+          25,
+          480
+        ],
+        "y": [
+          48,
+          479,
+          512,
+          512,
+          476,
+          50,
+          0,
+          0
+        ],
+        "u": [
+          513,
+          513,
+          480,
+          37,
+          1,
+          1,
+          26,
+          481
+        ],
+        "v": [
+          49,
+          480,
+          513,
+          513,
+          477,
+          51,
+          1,
+          1
+        ]
+      },
+      "spriteType": "normal",
+      "subMetas": {}
+    }
+  }
+}
