@@ -61,31 +61,21 @@ export default class NewClass extends cc.Component {
     }
 
     start () {
-        this.jt()
+        // this.jt()
+        //b2_articleContactFilterParticle
+        //b2_fixtureContactFilterParticle
 
     }
     jt(){
         // 创建碰撞监听器
-        const contactListener = new LiquidFun.b2ContactListener();
-        contactListener.BeginContact = function(contact) {
-            console.log("处理碰撞开始事件")
-            debugger
-            // 处理碰撞开始事件
-        };
-        contactListener.EndContact = function(contact) {
-            console.log("处理碰撞结束事件")
-            // 处理碰撞结束事件
-        };
-        contactListener.PreSolve = function(contact, oldManifold) {
-            console.log("处理碰撞预处理事件")
-            // 处理碰撞预处理事件
-        };
-        contactListener.PostSolve = function(contact, impulse) {
-            console.log("处理碰撞后处理事件")
-            // 处理碰撞后处理事件
+        const contactListener = new LiquidFun.b2ContactFilter();
+        contactListener.ShouldCollide = (fixtureA: LiquidFun.b2Fixture, fixtureB: LiquidFun.b2Fixture) => {
+            // 在这里编写检测两个物体是否可以碰撞的逻辑
+            console.log("碰撞了")
+            return true; // 如果允许碰撞，返回 true；否则返回 false。
         };
 
-        PhysicManager.physicWorld.SetContactListener(contactListener);
+        window.world.SetContactFilter(contactListener);
     }
 
     // update (dt) {}
