@@ -47,7 +47,7 @@ export default class PhysicManager extends cc.Component
 
         PhysicManager.physicWorld = new LiquidFun.b2World(this.gravity);
 
-        window.world = PhysicManager.physicWorld;
+        window.world = PhysicManager.physicWorld
     }
 
     start()
@@ -99,13 +99,20 @@ export default class PhysicManager extends cc.Component
         box.SetAsBox(width / PhysicManager.scale, width / PhysicManager.scale);
 
         //box.m_centroid=physicManager.convertToLiquidWorldPos(nodeWorldPos);
+        //形状
         groupDef.shape=box;
-        groupDef.flags=LiquidFun.b2ParticleFlag.b2_elasticParticle;
+        //粒子行为标志 -- 监听
+        //b2_elasticParticle:具有变形恢复能力。
+        groupDef.flags=LiquidFun.b2ParticleFlag.b2_elasticParticle|LiquidFun.b2ParticleFlag.b2_particleContactFilterParticle ;
 
         //b2_rigidParticleGroup
         //b2_solidParticleGroup
+        //组构造标志
+        // b2_solidParticleGroup:防止重叠或泄漏。
         groupDef.groupFlags=LiquidFun.b2ParticleGroupFlag.b2_solidParticleGroup;
+        //集团的世界地位。将组的形状移动等于位置值的距离。
         groupDef.position=PhysicManager.convertToLiquidWorldPos(worldPos);
+        //群的角速度。
         groupDef.angularVelocity=0;
 
         //groupDef.strength=1;
@@ -115,6 +122,7 @@ export default class PhysicManager extends cc.Component
         //创建物理group对象
         let softBodyGroup=LFParticleSystem.instance.particleSystem.CreateParticleGroup(groupDef);
         console.log("** soft firstIdx="+softBodyGroup.m_firstIndex+" lastIdx="+softBodyGroup.m_lastIndex);
+
         return softBodyGroup;
     }
 
