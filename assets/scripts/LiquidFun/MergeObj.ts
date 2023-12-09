@@ -9,7 +9,7 @@ export default class MergeObj extends cc.Component {
     public level:number=0;
 
     //等级对应的显示宽度
-    public spriteWidth:number=140;
+    public spriteWidth:number=100;
 
     //等级对应的软体每行关键点数量
     public softBodyKeyPointsPerLine:number=15;
@@ -31,7 +31,7 @@ export default class MergeObj extends cc.Component {
     public reset()
     {
         this.level=0;
-        this.spriteWidth=140;
+        this.spriteWidth=100;
         this.softBodyKeyPointsPerLine=15
         this.mergeFlag=false;
         this.mergeTarget=null;

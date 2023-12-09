@@ -4,8 +4,10 @@ import ResSprite from "../../../common/cmpt/ui/res/ResSprite";
 import requireComponent = cc._decorator.requireComponent;
 import SpriteFrame = cc.SpriteFrame;
 import {CommonData} from "../../../common/const/CommonData";
+import PZ from "./PZ";
 
 const {ccclass, property} = cc._decorator;
+import * as LiquidFun from "../../../Box2D/Common/b2Settings";
 
 @ccclass
 @requireComponent(ResSprite)
@@ -18,6 +20,9 @@ export default class NewClass extends cc.Component {
 
     onLoad () {
         this.loadDirImage()
+        // let physic=cc.director.getPhysicsManager();
+        // physic.enabled=true;
+
     }
 
     start () {

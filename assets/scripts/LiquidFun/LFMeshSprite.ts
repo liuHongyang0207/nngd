@@ -35,7 +35,7 @@ export default class LFMeshSprite extends cc.Component {
     public centerPos:cc.Vec2=cc.v2(0,0);
 
     //sprite纹理宽度
-    public static spriteWidth=512;
+    public static spriteWidth=514;
 
     //物理group的 startIdx, endIdx
     //public groupStartIdx:number=0;

@@ -38,7 +38,7 @@ export default class LFParticleSystem extends cc.Component {
     {
         this.particleSystemDef=new LiquidFun.b2ParticleSystemDef();
         //	粒子表现为具有该半径的圆。以 Box2D 为单位。
-        this.particleSystemDef.radius=10 / PhysicManager.scale;
+        this.particleSystemDef.radius=9 / PhysicManager.scale;
         this.particleSystem=PhysicManager.physicWorld.CreateParticleSystem(this.particleSystemDef);
     }
 }

@@ -47,7 +47,8 @@ export default class PhysicManager extends cc.Component
 
         PhysicManager.physicWorld = new LiquidFun.b2World(this.gravity);
 
-        window.world = PhysicManager.physicWorld
+        window.world = PhysicManager.physicWorld;
+
     }
 
     start()
@@ -91,6 +92,8 @@ export default class PhysicManager extends cc.Component
     //创建软体物理
     public static createSoftBodyGroup(spriteWidth:number, worldPos:cc.Vec2)
     {
+        LiquidFun.b2Contact.SetEnabled = true
+
         let groupDef=new LiquidFun.b2ParticleGroupDef();
 
         //softbody 物理形状
@@ -98,31 +101,18 @@ export default class PhysicManager extends cc.Component
         let box=new LiquidFun.b2PolygonShape();
         box.SetAsBox(width / PhysicManager.scale, width / PhysicManager.scale);
 
-        //box.m_centroid=physicManager.convertToLiquidWorldPos(nodeWorldPos);
-        //形状
         groupDef.shape=box;
-        //粒子行为标志 -- 监听
-        //b2_elasticParticle:具有变形恢复能力。
-        groupDef.flags=LiquidFun.b2ParticleFlag.b2_elasticParticle|LiquidFun.b2ParticleFlag.b2_particleContactFilterParticle ;
 
-        //b2_rigidParticleGroup
-        //b2_solidParticleGroup
-        //组构造标志
-        // b2_solidParticleGroup:防止重叠或泄漏。
         groupDef.groupFlags=LiquidFun.b2ParticleGroupFlag.b2_solidParticleGroup;
-        //集团的世界地位。将组的形状移动等于位置值的距离。
         groupDef.position=PhysicManager.convertToLiquidWorldPos(worldPos);
-        //群的角速度。
         groupDef.angularVelocity=0;
-
-        //groupDef.strength=1;
+        groupDef.flags=(LiquidFun.b2ParticleFlag.b2_elasticParticle|LiquidFun.b2ParticleFlag.b2_fixtureContactFilterParticle|LiquidFun.b2ParticleFlag.b2_particleContactFilterParticle) ;
 
         window.world.CreateBody(groupDef)
 
         //创建物理group对象
         let softBodyGroup=LFParticleSystem.instance.particleSystem.CreateParticleGroup(groupDef);
         console.log("** soft firstIdx="+softBodyGroup.m_firstIndex+" lastIdx="+softBodyGroup.m_lastIndex);
-
         return softBodyGroup;
     }
 

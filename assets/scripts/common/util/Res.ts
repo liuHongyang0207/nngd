@@ -242,7 +242,7 @@ export default class Res {
                 return;
             }
             bundle.load(parseData.loadUrl, type, (completedCount: number, totalCount: number, item: any)=> {
-                debugger
+
                 //加载进度赋值
                 ProgressBar.num = completedCount / totalCount;
             } ,(error: Error, resource: T) => {

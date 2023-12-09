@@ -1,16 +1,10 @@
 
 import Prefab = cc.Prefab;
 import EventTouch = cc.Event.EventTouch;
-import Res from "../../../common/util/Res";
-import {DirUrl} from "../../../common/const/Url";
-import ResSprite from "../../../common/cmpt/ui/res/ResSprite";
-import SpriteAtlas = cc.SpriteAtlas;
 import Layer from "../../../common/cmpt/base/Layer";
 import {CommonData} from "../../../common/const/CommonData";
+import LFParticleSystem from "../../../LiquidFun/LFParticleSystem";
 
-
-import * as LiquidFun from "../../../Box2D/Common/b2Settings";
-import PhysicManager from "../../../LiquidFun/PhysicManager";
 
 const {ccclass, property} = cc._decorator;
 
@@ -47,9 +41,7 @@ export default class NewClass extends cc.Component {
     private timerPool: cc.NodePool = null;
 
 
-
     onLoad(){
-        // this.getGDSprites().then(() => {
             this.GD_YB.active = false
 
             this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
@@ -57,28 +49,79 @@ export default class NewClass extends cc.Component {
             this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
             this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
             this.getGD_DD()
-        // })
     }
 
     start () {
-        // this.jt()
-        //b2_articleContactFilterParticle
-        //b2_fixtureContactFilterParticle
+
 
     }
-    jt(){
-        // 创建碰撞监听器
-        const contactListener = new LiquidFun.b2ContactFilter();
-        contactListener.ShouldCollide = (fixtureA: LiquidFun.b2Fixture, fixtureB: LiquidFun.b2Fixture) => {
-            // 在这里编写检测两个物体是否可以碰撞的逻辑
-            console.log("碰撞了")
-            return true; // 如果允许碰撞，返回 true；否则返回 false。
+
+
+    update(dt) {
+        let downs = this.DownNode.children;
+        let downsLength = downs.length;
+        let visited = new Set(); // 用于记录已经检查过的节点
+
+        // 深度优先搜索函数
+        const dfs = (node, nodes) => {
+            visited.add(node.uuid); // 标记当前节点为已访问
+            let connectedNodes = [node]; // 存储与当前节点相连的所有节点
+            for (let i = 4; i < nodes.length; i++) {
+                if (node !== nodes[i] && nodes[i]._name === "gd" && !visited.has(nodes[i].uuid)) {
+                    if (this.verifyCollision(node, nodes[i],true)) {
+                        connectedNodes = connectedNodes.concat(dfs(nodes[i], nodes));
+                    }
+                }
+            }
+            return connectedNodes;
         };
+        // 检查所有节点
+        // var lastElement = downs[downsLength - 1]
+        for (let i = 4; i < downs.length; i++) {
+            //明天继续判断怎么实现碰撞出声音
+            // if (i<downsLength-1){
+            //     var bool = this.verifyCollision(lastElement,downs[i],false)
+            //     if (bool){
+            //         Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
+            //         console.log("碰撞了！！")
+            //     }
+            // }
 
-        window.world.SetContactFilter(contactListener);
+            if (!visited.has(downs[i].uuid)) {
+                let connectedNodes = dfs(downs[i], downs);
+                // 如果相连的节点数大于等于3，则删除这些节点
+                if (connectedNodes.length >= 3) {
+                    for (let node of connectedNodes) {
+                        this.destroyMergeObjNode(node);
+                    }
+                    // 可以在这里添加声音提示和日志记录
+                    // Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
+                    // console.log("碰撞了并且删除了" + connectedNodes.length + "个方块！");
+                }
+            }
+        }
     }
 
-    // update (dt) {}
+    //校验两个物体碰撞的算法
+    verifyCollision(nodeA, nodeB,bool) {
+        const posA = nodeA.getComponent("LFMeshSprite").centerPos
+        const posB = nodeB.getComponent("LFMeshSprite").centerPos
+        const deltaX = Math.abs(posA.x - posB.x);
+        const deltaY = Math.abs(posA.y - posB.y);
+        const sumOfRadii = 100;
+        if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= sumOfRadii){
+
+            if (!bool){
+                return true
+            }
+            if (nodeA.getComponent(cc.Sprite).name==nodeB.getComponent(cc.Sprite).name){
+                return true
+            }
+
+
+        }
+        return false
+    }
 
     onTouchStart (event:EventTouch) {
         if (this.isTime){
@@ -102,9 +145,11 @@ export default class NewClass extends cc.Component {
             return
         }
         console.log("移动成功")
-        let touchPoint = event.getLocation();
-        touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
 
+        let touchPoint = event.getLocation();
+        // console.log("移动1："+touchPoint)
+
+        touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
         this.GD_YB.setPosition(this.getPositions(touchPoint).x,330);
     }
 
@@ -143,9 +188,10 @@ export default class NewClass extends cc.Component {
         // 随机选择一个精灵图片
         let sprite = bubble.getComponent(cc.Sprite);
         sprite.spriteFrame = this.SpriteFrames[this.GD_old]
+        sprite.name="gd_"+this.GD_old
         bubble.setPosition(touchPoint.x,touchPoint.y);
-        this.DownNode.addChild(bubble);
 
+        this.DownNode.addChild(bubble);
     }
 
     //预生成的果冻
@@ -160,7 +206,8 @@ export default class NewClass extends cc.Component {
 
     getGD_DD(){
         let min = 0;
-        let max = this.SpriteFrames.length-1;
+        // let max = this.SpriteFrames.length-1;
+        let max = 4;
         this.GD_num = Math.floor(Math.random() * (max - min + 1)) + min;
         let nextNode = this.node.getChildByName("Next");
 
@@ -196,6 +243,21 @@ export default class NewClass extends cc.Component {
 
     onDestroy() {
         this.unscheduleAllCallbacks()
+    }
+
+
+    //销毁释放mergeObj,传入node
+    public destroyMergeObjNode(obj:cc.Node)
+    {
+        if(!obj)
+            return;
+
+        let objMeshSprite = obj.getComponent("LFMeshSprite");
+        objMeshSprite.lfGroup.DestroyParticles();
+        LFParticleSystem.instance.particleSystem.DestroyParticleGroup(objMeshSprite.lfGroup);
+        objMeshSprite.lfGroup = null;
+        obj.removeFromParent();
+        obj.destroy();
     }
 
 }
