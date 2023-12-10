@@ -58,6 +58,7 @@ export default class LFMeshSprite extends cc.Component {
         this.sprite.spriteFrame.vertices.nu=[];
         this.sprite.spriteFrame.vertices.nv=[];
         this.sprite.spriteFrame.vertices.triangles=[];
+
     }
 
     start () {

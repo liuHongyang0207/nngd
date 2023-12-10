@@ -40,10 +40,19 @@ export default class NewClass extends cc.Component {
     //时间对象池
     private timerPool: cc.NodePool = null;
 
+    // 碰撞冷却时间
+    private  collisionCooldown:number = 1
+    // 上次碰撞发生的时间
+    private  lastCollisionTime:number = 0
+    // 允许的最大碰撞次数
+    private  maxCollisions:number = 3
+    //碰撞次数
+    private  collisionCount:number = 3
+
 
     onLoad(){
             this.GD_YB.active = false
-
+            this.lastCollisionTime = 0; // 上次碰撞发生的时间
             this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
             this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
             this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -62,6 +71,9 @@ export default class NewClass extends cc.Component {
         let downsLength = downs.length;
         let visited = new Set(); // 用于记录已经检查过的节点
 
+        if (downsLength>4){
+
+
         // 深度优先搜索函数
         const dfs = (node, nodes) => {
             visited.add(node.uuid); // 标记当前节点为已访问
@@ -76,16 +88,23 @@ export default class NewClass extends cc.Component {
             return connectedNodes;
         };
         // 检查所有节点
-        // var lastElement = downs[downsLength - 1]
+        var lastElement = downs[downsLength - 1]
         for (let i = 4; i < downs.length; i++) {
             //明天继续判断怎么实现碰撞出声音
-            // if (i<downsLength-1){
-            //     var bool = this.verifyCollision(lastElement,downs[i],false)
-            //     if (bool){
-            //         Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
-            //         console.log("碰撞了！！")
-            //     }
-            // }
+            if (i<downsLength-1){
+                var bool = this.verifyCollision(lastElement,downs[i],false)
+                let currentTime = Date.now();
+                // 检查是否碰撞以及是否超过冷却时间
+                if (bool&&(currentTime - this.lastCollisionTime) > this.collisionCooldown * 1000&&this.collisionCount < this.maxCollisions){
+                    this.lastCollisionTime = currentTime; // 更新上次碰撞时间
+                    // 增加碰撞次数
+                    this.collisionCount++;
+                    console.log("碰撞提醒：物体已碰撞！");
+                    // 播放碰撞声音
+                    // cc.audioEngine.playEffect(this.collisionSound, false);
+                    Layer.inst.showTip({ text: "碰撞提醒：物体已碰撞！", end: cc.v2(0, 100), duration: 0 });
+                }
+            }
 
             if (!visited.has(downs[i].uuid)) {
                 let connectedNodes = dfs(downs[i], downs);
@@ -99,6 +118,7 @@ export default class NewClass extends cc.Component {
                     // console.log("碰撞了并且删除了" + connectedNodes.length + "个方块！");
                 }
             }
+        }
         }
     }
 
@@ -192,6 +212,9 @@ export default class NewClass extends cc.Component {
         bubble.setPosition(touchPoint.x,touchPoint.y);
 
         this.DownNode.addChild(bubble);
+
+        //碰撞次数清0
+        this.collisionCount = 0
     }
 
     //预生成的果冻
