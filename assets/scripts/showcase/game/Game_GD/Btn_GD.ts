@@ -4,6 +4,8 @@ import EventTouch = cc.Event.EventTouch;
 import Layer from "../../../common/cmpt/base/Layer";
 import {CommonData} from "../../../common/const/CommonData";
 import LFParticleSystem from "../../../LiquidFun/LFParticleSystem";
+import * as LiquidFun from "../../../Box2D/Common/b2Settings";
+
 
 
 const {ccclass, property} = cc._decorator;
@@ -23,10 +25,22 @@ export default class NewClass extends cc.Component {
     //预生成的果冻
     @property(cc.Node)
     GD_YB = null
+    //预生成的粒子
+    @property(cc.Node)
+    particlePrefab = null
+
+    //预生成的粒子
+    @property(cc.Node)
+    GuoJiang = null
+    //预生成的爆炸的特效
+    @property(cc.Node)
+    BaoZha = null
     //果冻精灵，这个是最新的
     private GD_num = 0;
     //果冻精灵，这个是即将生成的
     private GD_old = 0;
+    //生成果冻的最大数
+    private GD_max = 1;
     //点击时间间隔
     private clickInterval: number = 0.4;
     //上一次点击的时间戳
@@ -48,6 +62,8 @@ export default class NewClass extends cc.Component {
     private  maxCollisions:number = 3
     //碰撞次数
     private  collisionCount:number = 3
+    //消除动画的速度
+    private  durations:number = 1
 
 
     onLoad(){
@@ -58,6 +74,7 @@ export default class NewClass extends cc.Component {
             this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
             this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
             this.getGD_DD()
+
     }
 
     start () {
@@ -112,7 +129,9 @@ export default class NewClass extends cc.Component {
                 if (connectedNodes.length >= 3) {
                     for (let node of connectedNodes) {
                         this.destroyMergeObjNode(node);
+                        this.triggerExplosionAt(node.getComponent("LFMeshSprite").centerPos)
                     }
+
                     // 可以在这里添加声音提示和日志记录
                     // Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
                     // console.log("碰撞了并且删除了" + connectedNodes.length + "个方块！");
@@ -230,8 +249,7 @@ export default class NewClass extends cc.Component {
     getGD_DD(){
         let min = 0;
         // let max = this.SpriteFrames.length-1;
-        let max = 4;
-        this.GD_num = Math.floor(Math.random() * (max - min + 1)) + min;
+        this.GD_num = Math.floor(Math.random() * (this.GD_max - min + 1)) + min;
         let nextNode = this.node.getChildByName("Next");
 
         // 获取Next节点上的gd组件
@@ -282,5 +300,63 @@ export default class NewClass extends cc.Component {
         obj.removeFromParent();
         obj.destroy();
     }
+
+// 触发爆炸效果的函数
+    triggerExplosionAt(position) {
+        debugger
+        let particleNode: cc.Node;
+
+        // 实例化粒子系统预制体
+        particleNode = cc.instantiate(this.particlePrefab);
+
+
+        // particleNode.parent = this.node; // 将粒子系统作为当前节点的子节点
+        // particleNode.parent =cc.director.getScene(); // 将粒子系统作为当前节点的子节点
+        // 将世界坐标转换为粒子系统父节点的局部坐标
+        var newLocalPosition = this.BaoZha.convertToNodeSpaceAR(position);
+
+        particleNode.setPosition(newLocalPosition); // 设置粒子系统的位置
+
+        // 获取粒子系统组件
+        var particleSystem = particleNode.getComponent(cc.ParticleSystem);
+        this.BaoZha.addChild(particleNode);
+
+
+
+        if (particleSystem) {
+            particleSystem.resetSystem(); // 播放粒子效果
+            let Position2 = this.GuoJiang.convertToWorldSpaceAR(this.GuoJiang.getPosition());
+            let PPPosition = this.BaoZha.convertToNodeSpaceAR(Position2)
+
+            //1秒后移动粒子
+            this.scheduleOnce(function () {
+
+                var children = this.BaoZha.children;
+                for (let i = 0; i < children.length; ++i) {
+
+                    let particle = children[i];
+                    //TODO
+                    cc.tween(particle)
+                        // .to(this.durations, { position: new cc.Vec3(PPPosition.x,PPPosition.y,0) })
+                        .to(this.durations, { position: new cc.Vec3(particle.getPosition().x,particle.getPosition().y+100,0) })
+                        .call(() => {
+                            // particle.destroy()
+                        })
+                        .start();
+                }
+
+
+                // 移动结束后销毁或回收粒子节点
+                // this.scheduleOnce(function () {
+                //     // 销毁粒子节点
+                //     particleNode.destroy();
+                //     // 或回收粒子节点到对象池（需要你自己实现对象池的逻辑）
+                //     // this.particlePool.put(particleNode);
+                // }, 2); // 假设移动动作持续时间为1秒
+            }, 1);
+        }
+    }
+
+
 
 }

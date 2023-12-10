@@ -9,11 +9,7 @@
     ]
   ],
   "excluded-modules": [
-    "Intersection",
     "Native Socket",
-    "Physics",
-    "ParticleSystem",
-    "RichText",
     "TiledMap",
     "VideoPlayer",
     "3D",
