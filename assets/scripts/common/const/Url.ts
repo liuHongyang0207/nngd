@@ -21,7 +21,11 @@ export const ResUrl = {
         SFX1: "audio/sfx1",
         SFX2: "audio/sfx2",
         SFX_UI: "audio/sfxUi"
+    },
+    MATERIAL:{
+        // FG_MATERIAL:"textures/specular_gloss/Specular_gloss"
     }
+
 }
 
 /**
@@ -43,4 +47,5 @@ export const DirUrl = {
     GD:"img/gd/",
 
     PP:"img/pp/"
+
 }

@@ -14,6 +14,8 @@ export default class Home extends cc.Component {
     public GDSprites: cc.SpriteAtlas[] = [];
     //果冻精灵图片数组
     public SpriteFrames = [];
+    //素材
+    public Materials = null
 
 
     private onClickGame() {
@@ -49,6 +51,7 @@ export default class Home extends cc.Component {
             this.SpriteFrames.push(gdSprite.getSpriteFrames()[0])
         }
         CommonData.instance.setData("GDSpriteFrames", this.SpriteFrames);
+        // CommonData.instance.setData("FG_MATERIAL", await Res.load(ResUrl.MATERIAL.FG_MATERIAL, cc.Material, false));
 
     }
 

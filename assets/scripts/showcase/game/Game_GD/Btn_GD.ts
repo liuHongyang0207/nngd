@@ -19,22 +19,24 @@ export default class NewClass extends cc.Component {
     // public GDSprites: SpriteAtlas[] = [];
     //果冻精灵图片数组
     public SpriteFrames =  CommonData.instance.getData("GDSpriteFrames");
+    //
+    private FG_MATERIAL =  CommonData.instance.getData("FG_MATERIAL");
     //上部block
     @property(cc.Node)
     DownNode = null
     //预生成的果冻
     @property(cc.Node)
     GD_YB = null
-    //预生成的粒子
-    @property(cc.Node)
-    particlePrefab = null
+
+    @property(cc.Prefab)
+    coinPrefab = null
+    coinPool: cc.NodePool = null;
+
 
     //预生成的粒子
     @property(cc.Node)
     GuoJiang = null
-    //预生成的爆炸的特效
-    @property(cc.Node)
-    BaoZha = null
+
     //果冻精灵，这个是最新的
     private GD_num = 0;
     //果冻精灵，这个是即将生成的
@@ -66,6 +68,8 @@ export default class NewClass extends cc.Component {
     private  durations:number = 1
 
 
+
+
     onLoad(){
             this.GD_YB.active = false
             this.lastCollisionTime = 0; // 上次碰撞发生的时间
@@ -74,6 +78,12 @@ export default class NewClass extends cc.Component {
             this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
             this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
             this.getGD_DD()
+
+            //加载素材
+        this.coinPool = new cc.NodePool();
+        this.initCoinPool();
+
+
 
     }
 
@@ -127,9 +137,10 @@ export default class NewClass extends cc.Component {
                 let connectedNodes = dfs(downs[i], downs);
                 // 如果相连的节点数大于等于3，则删除这些节点
                 if (connectedNodes.length >= 3) {
+
                     for (let node of connectedNodes) {
-                        this.destroyMergeObjNode(node);
-                        this.triggerExplosionAt(node.getComponent("LFMeshSprite").centerPos)
+
+                        this.triggerExplosionAt(node)
                     }
 
                     // 可以在这里添加声音提示和日志记录
@@ -301,62 +312,105 @@ export default class NewClass extends cc.Component {
         obj.destroy();
     }
 
-// 触发爆炸效果的函数
-    triggerExplosionAt(position) {
-        debugger
-        let particleNode: cc.Node;
-
-        // 实例化粒子系统预制体
-        particleNode = cc.instantiate(this.particlePrefab);
-
-
-        // particleNode.parent = this.node; // 将粒子系统作为当前节点的子节点
-        // particleNode.parent =cc.director.getScene(); // 将粒子系统作为当前节点的子节点
-        // 将世界坐标转换为粒子系统父节点的局部坐标
-        var newLocalPosition = this.BaoZha.convertToNodeSpaceAR(position);
-
-        particleNode.setPosition(newLocalPosition); // 设置粒子系统的位置
-
-        // 获取粒子系统组件
-        var particleSystem = particleNode.getComponent(cc.ParticleSystem);
-        this.BaoZha.addChild(particleNode);
+    // 触发爆炸效果的函数
+    triggerExplosionAt(node:cc.Node) {
+        //1、消除特效-变亮
 
 
 
-        if (particleSystem) {
-            particleSystem.resetSystem(); // 播放粒子效果
-            let Position2 = this.GuoJiang.convertToWorldSpaceAR(this.GuoJiang.getPosition());
-            let PPPosition = this.BaoZha.convertToNodeSpaceAR(Position2)
-
-            //1秒后移动粒子
-            this.scheduleOnce(function () {
-
-                var children = this.BaoZha.children;
-                for (let i = 0; i < children.length; ++i) {
-
-                    let particle = children[i];
-                    //TODO
-                    cc.tween(particle)
-                        // .to(this.durations, { position: new cc.Vec3(PPPosition.x,PPPosition.y,0) })
-                        .to(this.durations, { position: new cc.Vec3(particle.getPosition().x,particle.getPosition().y+100,0) })
-                        .call(() => {
-                            // particle.destroy()
-                        })
-                        .start();
-                }
+        //3、消除特效-爆炸
 
 
-                // 移动结束后销毁或回收粒子节点
-                // this.scheduleOnce(function () {
-                //     // 销毁粒子节点
-                //     particleNode.destroy();
-                //     // 或回收粒子节点到对象池（需要你自己实现对象池的逻辑）
-                //     // this.particlePool.put(particleNode);
-                // }, 2); // 假设移动动作持续时间为1秒
-            }, 1);
-        }
+        //2、消除特效-缩小
+
+
+
+        //消除
+        this.destroyMergeObjNode(node);
+        //4、消除特效-果冻浆收集
+        this.playAnim(node)
+
+
     }
 
+
+
+    private initCoinPool(count: number = 20) {
+        for (let i = 0; i < count; i++) {
+            let coin = cc.instantiate(this.coinPrefab);
+            this.coinPool.put(coin);
+        }
+    }
+    /**开始执行动画 */
+    private playAnim(nodeA:cc.Node) {
+        let Position2 = this.node.convertToWorldSpaceAR(this.GuoJiang.getPosition());
+        let PPPosition = this.DownNode.convertToNodeSpaceAR(Position2)
+
+        // let randomCount = Math.random() * 15 + 10;
+        let randomCount = 5;
+        let stPos = this.DownNode.convertToNodeSpaceAR(nodeA.getComponent("LFMeshSprite").centerPos);
+        let edPos = PPPosition;
+        this.playCoinFlyAnim(randomCount, stPos, new cc.Vec2(edPos.x,edPos.y-120));
+    }
+    // 确保当前节点池有足够的金币
+    private playCoinFlyAnim(count: number, stPos: cc.Vec2, edPos: cc.Vec2, r: number = 130) {
+        const poolSize = this.coinPool.size();
+        const reCreateCoinCount = poolSize > count ? 0 : count - poolSize;
+        this.initCoinPool(reCreateCoinCount);
+        // 生成圆，并且对圆上的点进行排序
+        let points = this.getCirclePoints(r, stPos, count);
+        let coinNodeList = points.map(pos => {
+            let coin = this.coinPool.get();
+            coin.setPosition(stPos);
+            this.node.addChild(coin);
+            return {
+                node: coin,
+                stPos: stPos,
+                mdPos: pos,
+                edPos: edPos,
+                dis: (pos as any).sub(edPos).mag()
+            };
+        });
+        coinNodeList = coinNodeList.sort((a, b) => {
+            if (a.dis - b.dis > 0) return 1;
+            if (a.dis - b.dis < 0) return -1;
+            return 0;
+        });
+
+        // 执行金币落袋的动画
+        coinNodeList.forEach((item, idx) => {
+            item.node.runAction(
+                cc.sequence(
+                    cc.moveTo(0.3, item.mdPos),
+                    cc.delayTime(idx * 0.04),
+                    cc.moveTo(0.8, item.edPos),
+                    cc.callFunc(() => {
+                        this.coinPool.put(item.node);
+                    })
+                )
+            );
+        });
+    }
+
+    /**
+     * 以某点为圆心，生成圆周上等分点的坐标
+     *
+     * @param {number} r 半径
+     * @param {cc.Vec2} pos 圆心坐标
+     * @param {number} count 等分点数量
+     * @param {number} [randomScope=80] 等分点的随机波动范围
+     * @returns {cc.Vec2[]} 返回等分点坐标
+     */
+    private getCirclePoints(r: number, pos: cc.Vec2, count: number, randomScope: number = 60): cc.Vec2[] {
+        let points = [];
+        let radians = (Math.PI / 180) * Math.round(360 / count);
+        for (let i = 0; i < count; i++) {
+            let x = pos.x + r * Math.sin(radians * i);
+            let y = pos.y + r * Math.cos(radians * i);
+            points.unshift(cc.v3(x + Math.random() * randomScope, y + Math.random() * randomScope, 0));
+        }
+        return points;
+    }
 
 
 }
