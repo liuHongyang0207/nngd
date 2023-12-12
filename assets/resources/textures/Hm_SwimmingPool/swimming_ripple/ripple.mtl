@@ -1,0 +1,27 @@
+{
+  "__type__": "cc.Material",
+  "_name": "ripple",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "81557bcd-9b0b-4d97-9640-60b64e077a5c"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "props": {
+        "speedFactor": 0.05,
+        "strengthFactor": 0.01,
+        "isHorizontal": 0.5,
+        "isVertical": 0.5,
+        "noisetex": {
+          "__uuid__": "b901e44d-f093-4237-b4c6-a23c190a6790"
+        }
+      },
+      "defines": {
+        "USE_TEXTURE": true,
+        "USE_NOISETEX": true
+      }
+    }
+  }
+}

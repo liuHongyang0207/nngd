@@ -39,6 +39,15 @@ export default class Home extends cc.Component {
         })
     }
 
+
+    private onClickOther() {
+
+
+    Layer.inst.enterMain(ResUrl.PREFAB.GAME);
+
+
+    }
+
     async getBjData(){
         this.spriteFrameList =  await Res.loadDir(DirUrl.BJ, cc.SpriteFrame, false);
         CommonData.instance.setData("getBjData", this.spriteFrameList);

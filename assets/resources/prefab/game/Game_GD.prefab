@@ -58,10 +58,13 @@
       },
       {
         "__id__": 99
+      },
+      {
+        "__id__": 100
       }
     ],
     "_prefab": {
-      "__id__": 100
+      "__id__": 101
     },
     "_opacity": 255,
     "_color": {
@@ -196,14 +199,14 @@
     "_enabled": true,
     "_materials": [
       {
-        "__uuid__": "eca5d2f2-8ef6-41c2-bbe6-f9c79d09c432"
+        "__uuid__": "aa1b434b-6f62-461e-95de-f7d20399f2dd"
       }
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": null,
     "_type": 0,
-    "_sizeMode": 0,
+    "_sizeMode": 1,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -3633,6 +3636,20 @@
     "GuoJiang": {
       "__id__": 70
     },
+    "_id": ""
+  },
+  {
+    "__type__": "ec1a45LzJJDS4sB8TSzIdsb",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "mainCamera": null,
+    "loading_1": null,
+    "loading_2": null,
+    "loading_3": null,
     "_id": ""
   },
   {
