@@ -47,7 +47,7 @@ export default class NewClass extends cc.Component {
     //果冻精灵，这个是即将生成的
     private GD_old = 0;
     //生成果冻的最大数
-    private GD_max = 1;
+    private GD_max = 0;
     //点击时间间隔
     private clickInterval: number = 0.4;
     //上一次点击的时间戳
@@ -84,10 +84,12 @@ export default class NewClass extends cc.Component {
             this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
             this.getGD_DD()
 
-            //加载素材
+            //加载水波纹
         this.coinPool = new cc.NodePool();
         this.initCoinPool();
 
+        //初始化第一关数据
+        this.initFirst("200","第一关",4)
 
 
     }
@@ -265,7 +267,7 @@ export default class NewClass extends cc.Component {
     getGD_DD(){
         let min = 0;
         // let max = this.SpriteFrames.length-1;
-        this.GD_num = Math.floor(Math.random() * (this.GD_max - min + 1)) + min;
+        this.GD_num = Math.floor(Math.random() * (this.GD_max - min )) + min;
         let nextNode = this.node.getChildByName("Next");
 
         // 获取Next节点上的gd组件
@@ -348,6 +350,7 @@ export default class NewClass extends cc.Component {
     }
     /**开始执行动画 */
     private playAnim(nodeA:cc.Node) {
+
         let Position2 = this.node.convertToWorldSpaceAR(this.GuoJiang.getPosition());
         let PPPosition = this.DownNode.convertToNodeSpaceAR(Position2)
 
@@ -417,6 +420,21 @@ export default class NewClass extends cc.Component {
             points.unshift(cc.v3(x + Math.random() * randomScope, y + Math.random() * randomScope, 0));
         }
         return points;
+    }
+
+    //初始化第一关数据
+    initFirst(target:string,level:string,GD_Number:number){
+
+        //初始化果冻数
+        this.GD_max = GD_Number
+
+        //初始化分数
+        this.GuoJiang.getChildByName("target").getComponent(cc.Label).string = target
+
+        //初始化关卡
+        this.node.getChildByName("Level").getChildByName("levelTitle").getComponent(cc.Label).string = level
+        //初始化倒计时
+
     }
 
 
