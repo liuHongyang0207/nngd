@@ -5,6 +5,7 @@ import Layer from "../../../common/cmpt/base/Layer";
 import {CommonData} from "../../../common/const/CommonData";
 import LFParticleSystem from "../../../LiquidFun/LFParticleSystem";
 import * as LiquidFun from "../../../Box2D/Common/b2Settings";
+import AnimValueLabel from "../../../common/cmpt/ui/animValue/AnimValueLabel";
 
 
 
@@ -31,6 +32,10 @@ export default class NewClass extends cc.Component {
     @property(cc.Prefab)
     coinPrefab = null
     coinPool: cc.NodePool = null;
+
+    //渐变数字
+    @property(AnimValueLabel)
+    public animLab: AnimValueLabel = null;
 
 
     //预生成的粒子
@@ -390,6 +395,8 @@ export default class NewClass extends cc.Component {
                 )
             );
         });
+        //缓动分数
+        this.animLab.setValue(this.animLab.endValue + 5);
     }
 
     /**

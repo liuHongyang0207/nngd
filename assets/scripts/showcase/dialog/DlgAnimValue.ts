@@ -37,4 +37,8 @@ export default class DlgAnimValue extends DialogBase {
     private onClickHPSub() {
         this.animHP.setValue(Math.max(0, this.animHP.endValue - 0.2));
     }
+
+    update(dt: number) {
+        this.animLab.setValue(this.animLab.endValue + 1);
+    }
 }

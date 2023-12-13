@@ -12,8 +12,8 @@
       "props": {
         "speedFactor": 0.05,
         "strengthFactor": 0.01,
-        "isHorizontal": 0.5,
-        "isVertical": 0.5,
+        "isHorizontal": 0.7,
+        "isVertical": 0.7,
         "noisetex": {
           "__uuid__": "b901e44d-f093-4237-b4c6-a23c190a6790"
         }
