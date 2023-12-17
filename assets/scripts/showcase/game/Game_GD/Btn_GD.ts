@@ -1,4 +1,3 @@
-
 import Prefab = cc.Prefab;
 import EventTouch = cc.Event.EventTouch;
 import Layer from "../../../common/cmpt/base/Layer";
@@ -6,22 +5,19 @@ import {CommonData} from "../../../common/const/CommonData";
 import LFParticleSystem from "../../../LiquidFun/LFParticleSystem";
 import * as LiquidFun from "../../../Box2D/Common/b2Settings";
 import AnimValueLabel from "../../../common/cmpt/ui/animValue/AnimValueLabel";
-
+import DataList from "./Btn_GD_Data";
+import audioUtils from "../../../showcase/dialog/DlgAudio";
 
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class Btn_GD extends cc.Component {
     // 果冻Prefab
     @property(Prefab)
     public GDPrefab: Prefab = null;
-    // 果冻精灵集数组
-    // public GDSprites: SpriteAtlas[] = [];
     //果冻精灵图片数组
-    public SpriteFrames =  CommonData.instance.getData("GDSpriteFrames");
-    //
-    private FG_MATERIAL =  CommonData.instance.getData("FG_MATERIAL");
+    public SpriteFrames = CommonData.instance.getData("GDSpriteFrames");
     //上部block
     @property(cc.Node)
     DownNode = null
@@ -37,10 +33,15 @@ export default class NewClass extends cc.Component {
     @property(AnimValueLabel)
     public animLab: AnimValueLabel = null;
 
-
     //预生成的粒子
     @property(cc.Node)
     GuoJiang = null
+
+
+    //初始化游戏的数据
+    private dataList: any = null
+
+    private audioUtils: any = null
 
     //果冻精灵，这个是最新的
     private GD_num = 0;
@@ -50,51 +51,60 @@ export default class NewClass extends cc.Component {
     private GD_max = 0;
     //点击时间间隔
     private clickInterval: number = 0.4;
-    //上一次点击的时间戳
-    private lastClickTime: number = 0;
     //定时器数量
     private count: number = 0;
     //是否在规定时间内
     private isTime: boolean = false;
     //开始点击事件
     private isStart: boolean = false;
-    //时间对象池
-    private timerPool: cc.NodePool = null;
 
     // 碰撞冷却时间
-    private  collisionCooldown:number = 1
+    private collisionCooldown: number = 1
     // 上次碰撞发生的时间
-    private  lastCollisionTime:number = 0
+    private lastCollisionTime: number = 0
     // 允许的最大碰撞次数
-    private  maxCollisions:number = 3
-    //碰撞次数
-    private  collisionCount:number = 3
-    //消除动画的速度
-    private  durations:number = 1
+    private maxCollisions: number = 3
+    //碰撞次数-可以出声音
+    private collisionCount: number = 3
+
+    //初始化倒计时的Label
+    private showTime: cc.Node = null
 
 
+    onLoad() {
 
 
-    onLoad(){
-            this.GD_YB.active = false
-            this.lastCollisionTime = 0; // 上次碰撞发生的时间
-            this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this);
-            this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
-            this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this);
-            this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-            this.getGD_DD()
+        this.node.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this,true);
+        this.node.on(cc.Node.EventType.TOUCH_MOVE, this.onTouchMove, this,true);
+        this.node.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this,true);
+        this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this,true);
+        this.getGD_DD()
 
-            //加载水波纹
+        // this.audioUtils = this.node.getComponent(audioUtils)
+        // this.audioUtils.onClickBgm1FadeIn()
+        //加载水波纹
         this.coinPool = new cc.NodePool();
         this.initCoinPool();
 
+
+        this.dataList = this.node.getComponent(DataList)
+
+
+        //初始化倒计时的Label
+        this.showTime = this.node.getChildByName("Level").getChildByName("showTime")
+
+
         //初始化第一关数据
-        this.initFirst("200","第一关",4)
+        this.initDate(this.dataList.firstData.firstNumber, this.dataList.firstData.leveTitle, this.dataList.firstData.GD_number, 1)
+
+
+        //初始化背景音乐
+
 
 
     }
 
-    start () {
+    start() {
 
 
     }
@@ -105,73 +115,73 @@ export default class NewClass extends cc.Component {
         let downsLength = downs.length;
         let visited = new Set(); // 用于记录已经检查过的节点
 
-        if (downsLength>4){
+        if (downsLength > 4) {
 
 
-        // 深度优先搜索函数
-        const dfs = (node, nodes) => {
-            visited.add(node.uuid); // 标记当前节点为已访问
-            let connectedNodes = [node]; // 存储与当前节点相连的所有节点
-            for (let i = 4; i < nodes.length; i++) {
-                if (node !== nodes[i] && nodes[i]._name === "gd" && !visited.has(nodes[i].uuid)) {
-                    if (this.verifyCollision(node, nodes[i],true)) {
-                        connectedNodes = connectedNodes.concat(dfs(nodes[i], nodes));
+            // 深度优先搜索函数
+            const dfs = (node, nodes) => {
+                visited.add(node.uuid); // 标记当前节点为已访问
+                let connectedNodes = [node]; // 存储与当前节点相连的所有节点
+                for (let i = 4; i < nodes.length; i++) {
+                    if (node !== nodes[i] && nodes[i]._name === "gd" && !visited.has(nodes[i].uuid)) {
+                        if (this.verifyCollision(node, nodes[i], true)) {
+                            connectedNodes = connectedNodes.concat(dfs(nodes[i], nodes));
+                        }
+                    }
+                }
+                return connectedNodes;
+            };
+            // 检查所有节点
+            var lastElement = downs[downsLength - 1]
+            for (let i = 4; i < downs.length; i++) {
+                //明天继续判断怎么实现碰撞出声音
+                if (i < downsLength - 1) {
+                    var bool = this.verifyCollision(lastElement, downs[i], false)
+                    let currentTime = Date.now();
+                    // 检查是否碰撞以及是否超过冷却时间
+                    if (bool && (currentTime - this.lastCollisionTime) > this.collisionCooldown * 1000 && this.collisionCount < this.maxCollisions) {
+                        this.lastCollisionTime = currentTime; // 更新上次碰撞时间
+                        // 增加碰撞次数
+                        this.collisionCount++;
+                        console.log("碰撞提醒：物体已碰撞！");
+                        // 播放碰撞声音
+                        // cc.audioEngine.playEffect(this.collisionSound, false);
+                        Layer.inst.showTip({text: "碰撞提醒：物体已碰撞！", end: cc.v2(0, 100), duration: 0});
+                    }
+                }
+
+                if (!visited.has(downs[i].uuid)) {
+                    let connectedNodes = dfs(downs[i], downs);
+                    // 如果相连的节点数大于等于3，则删除这些节点
+                    if (connectedNodes.length >= 3) {
+
+                        for (let node of connectedNodes) {
+
+                            this.triggerExplosionAt(node)
+                        }
+
+                        // 可以在这里添加声音提示和日志记录
+                        // Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
+                        // console.log("碰撞了并且删除了" + connectedNodes.length + "个方块！");
                     }
                 }
             }
-            return connectedNodes;
-        };
-        // 检查所有节点
-        var lastElement = downs[downsLength - 1]
-        for (let i = 4; i < downs.length; i++) {
-            //明天继续判断怎么实现碰撞出声音
-            if (i<downsLength-1){
-                var bool = this.verifyCollision(lastElement,downs[i],false)
-                let currentTime = Date.now();
-                // 检查是否碰撞以及是否超过冷却时间
-                if (bool&&(currentTime - this.lastCollisionTime) > this.collisionCooldown * 1000&&this.collisionCount < this.maxCollisions){
-                    this.lastCollisionTime = currentTime; // 更新上次碰撞时间
-                    // 增加碰撞次数
-                    this.collisionCount++;
-                    console.log("碰撞提醒：物体已碰撞！");
-                    // 播放碰撞声音
-                    // cc.audioEngine.playEffect(this.collisionSound, false);
-                    Layer.inst.showTip({ text: "碰撞提醒：物体已碰撞！", end: cc.v2(0, 100), duration: 0 });
-                }
-            }
-
-            if (!visited.has(downs[i].uuid)) {
-                let connectedNodes = dfs(downs[i], downs);
-                // 如果相连的节点数大于等于3，则删除这些节点
-                if (connectedNodes.length >= 3) {
-
-                    for (let node of connectedNodes) {
-
-                        this.triggerExplosionAt(node)
-                    }
-
-                    // 可以在这里添加声音提示和日志记录
-                    // Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
-                    // console.log("碰撞了并且删除了" + connectedNodes.length + "个方块！");
-                }
-            }
-        }
         }
     }
 
     //校验两个物体碰撞的算法
-    verifyCollision(nodeA, nodeB,bool) {
+    verifyCollision(nodeA, nodeB, bool) {
         const posA = nodeA.getComponent("LFMeshSprite").centerPos
         const posB = nodeB.getComponent("LFMeshSprite").centerPos
         const deltaX = Math.abs(posA.x - posB.x);
         const deltaY = Math.abs(posA.y - posB.y);
         const sumOfRadii = 100;
-        if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= sumOfRadii){
+        if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= sumOfRadii) {
 
-            if (!bool){
+            if (!bool) {
                 return true
             }
-            if (nodeA.getComponent(cc.Sprite).name==nodeB.getComponent(cc.Sprite).name){
+            if (nodeA.getComponent(cc.Sprite).name == nodeB.getComponent(cc.Sprite).name) {
                 return true
             }
 
@@ -180,9 +190,9 @@ export default class NewClass extends cc.Component {
         return false
     }
 
-    onTouchStart (event:EventTouch) {
-        if (this.isTime){
-            Layer.inst.showTip({ text: "点击太快啦！", end: cc.v2(0, 100), duration: 0 });
+    onTouchStart(event:EventTouch) {
+        if (this.isTime) {
+            Layer.inst.showTip({text: "点击太快啦！", end: cc.v2(0, 100), duration: 0});
             this.isStart = true
             return
         }
@@ -197,8 +207,8 @@ export default class NewClass extends cc.Component {
     }
 
 
-    onTouchMove (event:EventTouch) {
-        if (this.isStart){
+    onTouchMove(event: EventTouch) {
+        if (this.isStart) {
             return
         }
         console.log("移动成功")
@@ -207,12 +217,12 @@ export default class NewClass extends cc.Component {
         // console.log("移动1："+touchPoint)
 
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
-        this.GD_YB.setPosition(this.getPositions(touchPoint).x,330);
+        this.GD_YB.setPosition(this.getPositions(touchPoint).x, 330);
     }
 
 
-    onTouchEnd (event:EventTouch) {
-        if (this.isStart){
+    onTouchEnd(event: EventTouch) {
+        if (this.isStart) {
             return
         }
         console.log("结束成功")
@@ -224,8 +234,9 @@ export default class NewClass extends cc.Component {
         this.getGD(this.getPositions(touchPoint));
 
     }
-    onTouchCancel (event:EventTouch) {
-        if (this.isStart){
+
+    onTouchCancel(event: EventTouch) {
+        if (this.isStart) {
             return
         }
         console.log("移除成功")
@@ -245,8 +256,8 @@ export default class NewClass extends cc.Component {
         // 随机选择一个精灵图片
         let sprite = bubble.getComponent(cc.Sprite);
         sprite.spriteFrame = this.SpriteFrames[this.GD_old]
-        sprite.name="gd_"+this.GD_old
-        bubble.setPosition(touchPoint.x,touchPoint.y);
+        sprite.name = "gd_" + this.GD_old
+        bubble.setPosition(touchPoint.x, touchPoint.y);
 
         this.DownNode.addChild(bubble);
 
@@ -255,19 +266,19 @@ export default class NewClass extends cc.Component {
     }
 
     //预生成的果冻
-    getGD_YB(touchPoint){
+    getGD_YB(touchPoint) {
         let sprite = this.GD_YB.getComponent(cc.Sprite);
         sprite.spriteFrame = this.SpriteFrames[this.GD_num]
-        this.GD_YB.setPosition(touchPoint.x,330);
+        this.GD_YB.setPosition(touchPoint.x, 330);
         this.GD_old = this.GD_num
         this.getGD_DD()
     }
 
 
-    getGD_DD(){
+    getGD_DD() {
         let min = 0;
         // let max = this.SpriteFrames.length-1;
-        this.GD_num = Math.floor(Math.random() * (this.GD_max - min )) + min;
+        this.GD_num = Math.floor(Math.random() * (this.GD_max - min)) + min;
         let nextNode = this.node.getChildByName("Next");
 
         // 获取Next节点上的gd组件
@@ -276,27 +287,21 @@ export default class NewClass extends cc.Component {
     }
 
 
-    getPositions(touchPoint){
-        if (touchPoint.x<-225){
+    getPositions(touchPoint) {
+        if (touchPoint.x < -225) {
             touchPoint.x = -225
-        }else if (touchPoint.x>225){
+        } else if (touchPoint.x > 225) {
             touchPoint.x = 225
         }
 
         return touchPoint
     }
 
-    getTime(){
+    getTime() {
         this.isTime = true
         this.scheduleOnce(() => {
             // 在这里写点击事件的处理逻辑
             this.isTime = false
-            this.count++;
-            if (this.count > 10) {
-                this.count = 0
-                // 先移除之前的定时器
-                this.unscheduleAllCallbacks();
-            }
         }, this.clickInterval);
     }
 
@@ -306,9 +311,8 @@ export default class NewClass extends cc.Component {
 
 
     //销毁释放mergeObj,传入node
-    public destroyMergeObjNode(obj:cc.Node)
-    {
-        if(!obj)
+    public destroyMergeObjNode(obj: cc.Node) {
+        if (!obj)
             return;
 
         let objMeshSprite = obj.getComponent("LFMeshSprite");
@@ -320,7 +324,7 @@ export default class NewClass extends cc.Component {
     }
 
     // 触发爆炸效果的函数
-    triggerExplosionAt(node:cc.Node) {
+    triggerExplosionAt(node: cc.Node) {
         //1、消除特效-变亮
 
 
@@ -349,7 +353,7 @@ export default class NewClass extends cc.Component {
         }
     }
     /**开始执行动画 */
-    private playAnim(nodeA:cc.Node) {
+    private playAnim(nodeA: cc.Node) {
 
         let Position2 = this.node.convertToWorldSpaceAR(this.GuoJiang.getPosition());
         let PPPosition = this.DownNode.convertToNodeSpaceAR(Position2)
@@ -358,7 +362,7 @@ export default class NewClass extends cc.Component {
         let randomCount = 5;
         let stPos = this.DownNode.convertToNodeSpaceAR(nodeA.getComponent("LFMeshSprite").centerPos);
         let edPos = PPPosition;
-        this.playCoinFlyAnim(randomCount, stPos, new cc.Vec2(edPos.x,edPos.y-120));
+        this.playCoinFlyAnim(randomCount, stPos, new cc.Vec2(edPos.x, edPos.y - 120));
     }
     // 确保当前节点池有足够的金币
     private playCoinFlyAnim(count: number, stPos: cc.Vec2, edPos: cc.Vec2, r: number = 130) {
@@ -422,19 +426,112 @@ export default class NewClass extends cc.Component {
         return points;
     }
 
-    //初始化第一关数据
-    initFirst(target:string,level:string,GD_Number:number){
+    //初始化关卡数据
+    initDate(target: string, leveTitle: string, GD_Number: number, levelNumber: number) {
 
+        //如果是第一关
+        if (levelNumber == 1) {
+            this.GD_YB.active = false
+            this.lastCollisionTime = 0; // 上次碰撞发生的时间
+            //初始化倒计时
+            this.countDownTime(this.dataList.firstData.firstLevelTime, 0)
+        } else {
+
+        }
         //初始化果冻数
         this.GD_max = GD_Number
-
         //初始化分数
         this.GuoJiang.getChildByName("target").getComponent(cc.Label).string = target
-
         //初始化关卡
-        this.node.getChildByName("Level").getChildByName("levelTitle").getComponent(cc.Label).string = level
-        //初始化倒计时
+        this.node.getChildByName("Level").getChildByName("levelTitle").getComponent(cc.Label).string = leveTitle
 
+
+    }
+
+    //修改第一关的倒计时
+    updateShowTime(string: string) {
+        this.showTime.getComponent(cc.Label).string = string
+    }
+
+    //倒计时函数
+    countDownTime(setSecondTime: number, type: number) {//以秒计算时间差 每三分钟恢复1个血量总共18个血量，恢复满需要 54min
+        let fenzhong = Math.floor(setSecondTime / 60) //向下取整
+        let miaoshu = Math.floor(setSecondTime % 60) //取余数
+
+
+        this.schedule(() => {
+                // ...你的定时器代码
+                if (miaoshu == 0) {
+                    fenzhong = fenzhong - 1;
+                    miaoshu = 60;
+                }
+                miaoshu = miaoshu - 1;
+                switch (type) {
+                    //0等于第一关的倒计时
+                    case 0:
+                        this.showTime.active = true
+                        this.updateShowTime(String(fenzhong) + ":" + String(miaoshu))
+                        console.log(String(fenzhong) + ":" + String(miaoshu))
+                        //如果倒计时结束了
+                        if (fenzhong == 0 && miaoshu == 0) {
+                            //判断分数是否达到
+                            if (this.animLab.endValue >= Number(this.dataList.firstData.firstNumber)) {
+                                //初始化第二关
+                                console.log("初始化第二关")
+                            } else {
+                                this.scheduleOnce(function(){
+                                    this.onPauses()
+                                    //失败 - 显示失败页面
+                                    this.node.getChildByName("layerOver").active = true
+                                    console.log("失败了")
+                                },0.5)
+
+                            }
+                        }
+                        break;
+                    default:
+                        console.log('不满足上述所有case时, 执行默认')
+                }
+            },1, setSecondTime - 1)
+
+
+    }
+
+    //暂停游戏
+    onPauses() {
+        cc.director.pause()
+        this.node.pauseSystemEvents(true);
+    }
+
+    //恢复游戏
+    onResumes() {
+        cc.director.resume()
+        this.node.resumeSystemEvents(true);
+    }
+
+    //点击道具
+    onCheckPropOne() {
+        this.onPauses()
+        //失败 - 显示失败页面
+        this.node.getChildByName("layerOver").active = true
+    }
+
+    //重新开始
+    restartGame() {
+        //清楚所有的果冻
+        let deletes = this.DownNode.children
+        let deleteLength = deletes.length
+        for (let i = 4; i < deleteLength; i++) {
+            this.destroyMergeObjNode(deletes[4])
+        }
+
+
+        //todo 道具归零、复活次数归零
+
+        //初始化第一关数据
+        this.onResumes()
+        this.node.getChildByName("layerOver").active = false
+        this.initDate(this.dataList.firstData.firstNumber, this.dataList.firstData.leveTitle, this.dataList.firstData.GD_number, 1)
     }
 
 
