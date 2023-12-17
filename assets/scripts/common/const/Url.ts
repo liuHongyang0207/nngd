@@ -20,7 +20,8 @@ export const ResUrl = {
 
         SFX1: "audio/sfx1",
         SFX2: "audio/sfx2",
-        SFX_UI: "audio/sfxUi"
+        SFX_UI: "audio/sfxUi",
+        lose: "audio/sound_lose"
     },
     MATERIAL:{
         // FG_MATERIAL:"textures/specular_gloss/Specular_gloss"

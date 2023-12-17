@@ -17,7 +17,7 @@ export default class Btn_GD_Data extends cc.Component {
     onLoad() {
         this.firstData = {
             //初始化第一关倒计时
-            firstLevelTime: 15,
+            firstLevelTime: 120,
             //初始化第一关的目标分数
             firstNumber:"200",
             //初始化果冻数

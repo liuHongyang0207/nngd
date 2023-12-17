@@ -22,33 +22,39 @@ export default class DlgAudio extends DialogBase {
         this.onSlide();
     }
 
-    private onSlide() {
+    public onSlide() {
         AudioManager.bgmVolume = this.volumeSlider.progress;
         AudioManager.sfxVolume = this.volumeSlider.progress;
     }
 
-    private onClickBgm1FadeIn() {
+    public onClickBgm1FadeIn() {
         AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), fadeDuration: 5 });
     }
 
-    private onClickBgm1OutBgm2In() {
+    public onClickBgm1OutBgm2In() {
         AudioManager.stopBgm(Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), 5);
         AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM2, cc.AudioClip), fadeDuration: 5 });
     }
 
-    private onClickBgmFadeOut() {
+    public onClickBgmFadeOut() {
         AudioManager.stopBgm(Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), 5);
-        AudioManager.stopBgm(Res.get(ResUrl.AUDIO.BGM2, cc.AudioClip), 5);
+        // AudioManager.stopBgm(Res.get(ResUrl.AUDIO.BGM2, cc.AudioClip), 5);
     }
 
     // 即使多次点击按钮，此音效也始终只会同时播放一个
-    private onClickSfx1() {
-        AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL, 1, false);
-        AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL);
+    public onClickSfx1(type) {
+        if (type=="lose"){
+            AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.lose, cc.AudioClip), SfxType.NORMAL, 1, false);
+            AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.lose, cc.AudioClip), SfxType.NORMAL);
+        }else {
+            AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL, 1, false);
+            AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL);
+        }
+
     }
 
     // 此音效最多同时播放五个
-    private onClickSfx2() {
+    public onClickSfx2() {
         AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX2, cc.AudioClip), SfxType.NORMAL, 5, false);
         AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX2, cc.AudioClip), SfxType.NORMAL);
     }

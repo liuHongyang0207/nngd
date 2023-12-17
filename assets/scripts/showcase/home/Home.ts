@@ -59,6 +59,7 @@ export default class Home extends cc.Component {
         for (let gdSprite of this.GDSprites) {
             this.SpriteFrames.push(gdSprite.getSpriteFrames()[0])
         }
+        await Res.loadDir(DirUrl.AUDIO, cc.AudioClip, false);
         CommonData.instance.setData("GDSpriteFrames", this.SpriteFrames);
         // CommonData.instance.setData("FG_MATERIAL", await Res.load(ResUrl.MATERIAL.FG_MATERIAL, cc.Material, false));
 

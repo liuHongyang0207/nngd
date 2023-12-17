@@ -7,6 +7,10 @@ import * as LiquidFun from "../../../Box2D/Common/b2Settings";
 import AnimValueLabel from "../../../common/cmpt/ui/animValue/AnimValueLabel";
 import DataList from "./Btn_GD_Data";
 import audioUtils from "../../../showcase/dialog/DlgAudio";
+import AudioManager, { SfxType } from "../../../common/util/AudioManager";
+import Res from "../../../common/util/Res";
+import {ResUrl} from "../../../common/const/Url";
+
 
 
 const {ccclass, property} = cc._decorator;
@@ -33,6 +37,10 @@ export default class Btn_GD extends cc.Component {
     @property(AnimValueLabel)
     public animLab: AnimValueLabel = null;
 
+    //渐变数字
+
+    public audioUtils: audioUtils = null;
+
     //预生成的粒子
     @property(cc.Node)
     GuoJiang = null
@@ -41,7 +49,6 @@ export default class Btn_GD extends cc.Component {
     //初始化游戏的数据
     private dataList: any = null
 
-    private audioUtils: any = null
 
     //果冻精灵，这个是最新的
     private GD_num = 0;
@@ -80,14 +87,14 @@ export default class Btn_GD extends cc.Component {
         this.node.on(cc.Node.EventType.TOUCH_CANCEL, this.onTouchCancel, this,true);
         this.getGD_DD()
 
-        // this.audioUtils = this.node.getComponent(audioUtils)
-        // this.audioUtils.onClickBgm1FadeIn()
         //加载水波纹
         this.coinPool = new cc.NodePool();
         this.initCoinPool();
 
 
         this.dataList = this.node.getComponent(DataList)
+        this.audioUtils = this.node.getComponent(audioUtils)
+        this.audioUtils.onClickBgm1FadeIn()
 
 
         //初始化倒计时的Label
@@ -99,6 +106,7 @@ export default class Btn_GD extends cc.Component {
 
 
         //初始化背景音乐
+        // this.onClickBgm1FadeIn()
 
 
 
@@ -479,6 +487,8 @@ export default class Btn_GD extends cc.Component {
                                 //初始化第二关
                                 console.log("初始化第二关")
                             } else {
+                                this.audioUtils.onClickBgmFadeOut()
+                                this.audioUtils.onClickSfx1("lose")
                                 this.scheduleOnce(function(){
                                     this.onPauses()
                                     //失败 - 显示失败页面
@@ -518,20 +528,25 @@ export default class Btn_GD extends cc.Component {
 
     //重新开始
     restartGame() {
+        this.audioUtils.onClickBgm1FadeIn()
         //清楚所有的果冻
         let deletes = this.DownNode.children
         let deleteLength = deletes.length
         for (let i = 4; i < deleteLength; i++) {
             this.destroyMergeObjNode(deletes[4])
         }
-
-
         //todo 道具归零、复活次数归零
-
         //初始化第一关数据
         this.onResumes()
-        this.node.getChildByName("layerOver").active = false
-        this.initDate(this.dataList.firstData.firstNumber, this.dataList.firstData.leveTitle, this.dataList.firstData.GD_number, 1)
+        this.scheduleOnce(function(){
+            this.node.getChildByName("layerOver").active = false
+            this.initDate(this.dataList.firstData.firstNumber, this.dataList.firstData.leveTitle, this.dataList.firstData.GD_number, 1)
+        },0.5)
+    }
+
+
+    public onClickBgm1FadeIn() {
+        AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), fadeDuration: 5 });
     }
 
 
