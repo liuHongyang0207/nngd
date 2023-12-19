@@ -46,6 +46,10 @@ export default class DlgAudio extends DialogBase {
         if (type=="lose"){
             AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.lose, cc.AudioClip), SfxType.NORMAL, 1, false);
             AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.lose, cc.AudioClip), SfxType.NORMAL);
+        }else if(type=="click"){
+            AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.click, cc.AudioClip), SfxType.NORMAL, 1, false);
+            AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.click, cc.AudioClip), SfxType.NORMAL);
+
         }else {
             AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL, 1, false);
             AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL);

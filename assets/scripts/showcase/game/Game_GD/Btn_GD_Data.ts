@@ -17,11 +17,11 @@ export default class Btn_GD_Data extends cc.Component {
     onLoad() {
         this.firstData = {
             //初始化第一关倒计时
-            firstLevelTime: 120,
+            firstLevelTime: 60,
             //初始化第一关的目标分数
             firstNumber:"200",
             //初始化果冻数
-            GD_number:4,
+            GD_number:5,
             //初始化关卡标题
             leveTitle:"第一关",
 
@@ -29,6 +29,8 @@ export default class Btn_GD_Data extends cc.Component {
         this.secondData = {
             //初始化第二关的目标分数
             endNumber:"2000",
+            GD_number:7,
+            leveTitle:"第二关",
         }
         this.otherData = {
 

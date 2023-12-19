@@ -271,6 +271,7 @@ export default class Btn_GD extends cc.Component {
 
         //碰撞次数清0
         this.collisionCount = 0
+        this.audioUtils.onClickSfx1("click")
     }
 
     //预生成的果冻
@@ -444,6 +445,10 @@ export default class Btn_GD extends cc.Component {
             //初始化倒计时
             this.countDownTime(this.dataList.firstData.firstLevelTime, 0)
         } else {
+            //清除倒计时
+            this.unscheduleAllCallbacks()
+            //将倒计时屏蔽
+            this.showTime.active = false
 
         }
         //初始化果冻数
@@ -484,16 +489,21 @@ export default class Btn_GD extends cc.Component {
                         if (fenzhong == 0 && miaoshu == 0) {
                             //判断分数是否达到
                             if (this.animLab.endValue >= Number(this.dataList.firstData.firstNumber)) {
-                                //初始化第二关
+                                Layer.inst.showTip({ text: "难度提升~", unique: true, end: cc.v2(0, 100) });
+                                this.scheduleOnce(function(){
+                                    //初始化第二关
+                                    this.initDate(this.dataList.secondData.endNumber, this.dataList.secondData.leveTitle, this.dataList.secondData.GD_number, 2)
+                                },0.5)
                                 console.log("初始化第二关")
                             } else {
-                                this.audioUtils.onClickBgmFadeOut()
+
                                 this.audioUtils.onClickSfx1("lose")
                                 this.scheduleOnce(function(){
                                     this.onPauses()
                                     //失败 - 显示失败页面
                                     this.node.getChildByName("layerOver").active = true
                                     console.log("失败了")
+                                    this.audioUtils.onClickBgmFadeOut()
                                 },0.5)
 
                             }
