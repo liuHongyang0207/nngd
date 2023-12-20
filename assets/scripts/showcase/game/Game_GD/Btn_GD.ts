@@ -10,6 +10,7 @@ import audioUtils from "../../../showcase/dialog/DlgAudio";
 import AudioManager, { SfxType } from "../../../common/util/AudioManager";
 import Res from "../../../common/util/Res";
 import {ResUrl} from "../../../common/const/Url";
+import ShakeNode from "../../../common/cmpt/ui/ShakeNode";
 
 
 
@@ -485,6 +486,14 @@ export default class Btn_GD extends cc.Component {
                         this.showTime.active = true
                         this.updateShowTime(String(fenzhong) + ":" + String(miaoshu))
                         console.log(String(fenzhong) + ":" + String(miaoshu))
+
+                        //判断是否剩下最后10s钟
+                        if (fenzhong == 0 && miaoshu == 10){
+                            //播放倒计时音乐
+                            this.startScaleAction(this.showTime)
+                            this.audioUtils.onClickSfx1("countDown")
+                            //开始震动
+                        }
                         //如果倒计时结束了
                         if (fenzhong == 0 && miaoshu == 0) {
                             //判断分数是否达到
@@ -496,7 +505,9 @@ export default class Btn_GD extends cc.Component {
                                 },0.5)
                                 console.log("初始化第二关")
                             } else {
-
+                                //停止倒计时的动作
+                                this.showTime.stopAllActions();
+                                //播放失败的音乐
                                 this.audioUtils.onClickSfx1("lose")
                                 this.scheduleOnce(function(){
                                     this.onPauses()
@@ -554,9 +565,31 @@ export default class Btn_GD extends cc.Component {
         },0.5)
     }
 
-
+    // 播放背景音乐
     public onClickBgm1FadeIn() {
-        AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), fadeDuration: 5 });
+        // 生成一个 0 到 1 之间的随机数
+        let randomNum = Math.random();
+
+        // 根据随机数选择选项
+        if (randomNum < 0.5) {
+            // 选择第一个选项
+            AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), fadeDuration: 5 });
+
+        } else {
+            // 选择第二个选项
+            AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM2, cc.AudioClip), fadeDuration: 5 });
+
+        }
+
+    }
+
+    //放大缩小
+    startScaleAction(node:cc.Node) {
+        let scaleUp = cc.scaleTo(this.dataList.otherData.duration / 2, this.dataList.otherData.scaleFactor);
+        let scaleDown = cc.scaleTo(this.dataList.otherData.duration / 2, 1);
+        let sequence = cc.sequence(scaleUp, scaleDown);
+        let repeat = cc.repeatForever(sequence);
+        node.runAction(repeat);
     }
 
 

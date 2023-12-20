@@ -2733,7 +2733,7 @@
     "_prefab": {
       "__id__": 84
     },
-    "_opacity": 128,
+    "_opacity": 166,
     "_color": {
       "__type__": "cc.Color",
       "r": 255,
@@ -3686,7 +3686,7 @@
       "__id__": 96
     },
     "_children": [],
-    "_active": false,
+    "_active": true,
     "_components": [
       {
         "__id__": 101
@@ -3705,7 +3705,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 73.4,
+      "width": 105,
       "height": 37.8
     },
     "_anchorPoint": {
@@ -3757,9 +3757,9 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "Label",
-    "_N$string": "Label",
-    "_fontSize": 30,
+    "_string": "倒计时",
+    "_N$string": "倒计时",
+    "_fontSize": 35,
     "_lineHeight": 30,
     "_enableWrapText": true,
     "_N$file": null,

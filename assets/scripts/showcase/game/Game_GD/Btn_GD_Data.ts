@@ -33,7 +33,10 @@ export default class Btn_GD_Data extends cc.Component {
             leveTitle:"第二关",
         }
         this.otherData = {
-
+            // 倒计时- 动画持续时间
+            duration: 1,
+            // 倒计时- 放大倍数
+            scaleFactor: 1.2,
         }
     }
 }

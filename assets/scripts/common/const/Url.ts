@@ -22,6 +22,7 @@ export const ResUrl = {
         SFX2: "audio/sfx2",
         SFX_UI: "audio/sfxUi",
         lose: "audio/sound_lose",
+        countDown: "audio/countdown",
         click: "audio/sound_click"
     },
     MATERIAL:{

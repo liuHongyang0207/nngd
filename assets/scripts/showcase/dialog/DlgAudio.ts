@@ -50,7 +50,11 @@ export default class DlgAudio extends DialogBase {
             AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.click, cc.AudioClip), SfxType.NORMAL, 1, false);
             AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.click, cc.AudioClip), SfxType.NORMAL);
 
-        }else {
+        }else if(type=="countDown"){
+            AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.countDown, cc.AudioClip), SfxType.NORMAL, 1, false);
+            AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.countDown, cc.AudioClip), SfxType.NORMAL);
+        }
+        else {
             AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL, 1, false);
             AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL);
         }
