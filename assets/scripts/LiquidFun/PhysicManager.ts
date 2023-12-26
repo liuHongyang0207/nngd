@@ -97,7 +97,7 @@ export default class PhysicManager extends cc.Component
         let groupDef=new LiquidFun.b2ParticleGroupDef();
 
         //softbody 物理形状
-        let width:number=spriteWidth * 0.5;
+        let width:number=spriteWidth * 0.55;
         let box=new LiquidFun.b2PolygonShape();
         box.SetAsBox(width / PhysicManager.scale, width / PhysicManager.scale);
 

@@ -28,7 +28,15 @@ export default class DlgAudio extends DialogBase {
     }
 
     public onClickBgm1FadeIn() {
-        AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), fadeDuration: 5 });
+        var randomIndex = Math.floor(Math.random() * 2);
+
+        if ((randomIndex+1)==1){
+            AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), fadeDuration: 5 });
+        }else {
+            AudioManager.playBgm({ clip: Res.get(ResUrl.AUDIO.BGM2, cc.AudioClip), fadeDuration: 5 });
+
+        }
+
     }
 
     public onClickBgm1OutBgm2In() {
@@ -38,7 +46,7 @@ export default class DlgAudio extends DialogBase {
 
     public onClickBgmFadeOut() {
         AudioManager.stopBgm(Res.get(ResUrl.AUDIO.BGM1, cc.AudioClip), 5);
-        // AudioManager.stopBgm(Res.get(ResUrl.AUDIO.BGM2, cc.AudioClip), 5);
+        AudioManager.stopBgm(Res.get(ResUrl.AUDIO.BGM2, cc.AudioClip), 5);
     }
 
     // 即使多次点击按钮，此音效也始终只会同时播放一个

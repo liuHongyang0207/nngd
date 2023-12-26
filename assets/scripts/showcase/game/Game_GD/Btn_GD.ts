@@ -200,6 +200,11 @@ export default class Btn_GD extends cc.Component {
     }
 
     onTouchStart(event:EventTouch) {
+        //判断是否在有效范围内生成果冻
+        if (!this.boolPos(event.getLocation(),this.DownNode)){
+            return;
+        }
+
         if (this.isTime) {
             Layer.inst.showTip({text: "点击太快啦！", end: cc.v2(0, 100), duration: 0});
             this.isStart = true
@@ -217,10 +222,18 @@ export default class Btn_GD extends cc.Component {
 
 
     onTouchMove(event: EventTouch) {
+        //如果预制果冻没有生成
+        if (this.GD_YB.active==false){
+            return;
+        }
+
+        // //判断是否在有效范围内生成果冻
+        // if (!this.boolPos(event.getLocation(),this.DownNode)){
+        //     return;
+        // }
         if (this.isStart) {
             return
         }
-        console.log("移动成功")
 
         let touchPoint = event.getLocation();
         // console.log("移动1："+touchPoint)
@@ -231,10 +244,19 @@ export default class Btn_GD extends cc.Component {
 
 
     onTouchEnd(event: EventTouch) {
+
+        //如果预制果冻没有生成
+        if (this.GD_YB.active==false){
+            return;
+        }
+
+        // //判断是否在有效范围内生成果冻
+        // if (!this.boolPos(event.getLocation(),this.DownNode)){
+        //     return;
+        // }
         if (this.isStart) {
             return
         }
-        console.log("结束成功")
         this.getTime()
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
@@ -245,10 +267,18 @@ export default class Btn_GD extends cc.Component {
     }
 
     onTouchCancel(event: EventTouch) {
+
+        //如果预制果冻没有生成
+        if (this.GD_YB.active==false){
+            return;
+        }
+        //判断是否在有效范围内生成果冻
+        // if (!this.boolPos(event.getLocation(),this.DownNode)){
+        //     return;
+        // }
         if (this.isStart) {
             return
         }
-        console.log("移除成功")
         this.getTime()
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
@@ -592,5 +622,17 @@ export default class Btn_GD extends cc.Component {
         node.runAction(repeat);
     }
 
+    //判断点击的坐标是否在指定位置
+    boolPos(touchLocation,childNode){
+        let localPos = childNode.convertToNodeSpaceAR(touchLocation);
+        let childBoundingBox = childNode.getBoundingBox();
+        localPos.y = localPos.y-100
+
+        if (childBoundingBox.contains(localPos)) {
+            // 在子节点范围内
+            return true
+        }
+        return false
+    }
 
 }
