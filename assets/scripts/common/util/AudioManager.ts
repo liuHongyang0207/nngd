@@ -233,6 +233,9 @@ export default class AudioManager {
         if (!data.hasOwnProperty("finishCall")) {
             data.finishCall = null;
         }
+        if (data.clip.name == "bgm1" || data.clip.name=="bgm2"){
+            data.loop = true;
+        }
 
         if (audioData) {
             audioData.id = cc.audioEngine.play(data.clip, data.loop, volume);
