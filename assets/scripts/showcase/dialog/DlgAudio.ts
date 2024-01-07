@@ -61,6 +61,12 @@ export default class DlgAudio extends DialogBase {
         }else if(type=="countDown"){
             AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.countDown, cc.AudioClip), SfxType.NORMAL, 1, false);
             AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.countDown, cc.AudioClip), SfxType.NORMAL);
+        }else if(type=="sfx_xiaochu01"){
+            AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.sfx_xiaochu01, cc.AudioClip), SfxType.NORMAL, 1, false);
+            AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.sfx_xiaochu01, cc.AudioClip), SfxType.NORMAL);
+        }else if(type=="sfx_321"){
+            AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.sfx_321, cc.AudioClip), SfxType.NORMAL, 1, false);
+            AudioManager.playSfx(Res.get<cc.AudioClip>(ResUrl.AUDIO.sfx_321, cc.AudioClip), SfxType.NORMAL);
         }
         else {
             AudioManager.setSfxData(Res.get<cc.AudioClip>(ResUrl.AUDIO.SFX1, cc.AudioClip), SfxType.NORMAL, 1, false);

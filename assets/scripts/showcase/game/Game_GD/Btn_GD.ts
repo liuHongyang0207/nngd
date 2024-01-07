@@ -74,9 +74,16 @@ export default class Btn_GD extends cc.Component {
     private maxCollisions: number = 3
     //碰撞次数-可以出声音
     private collisionCount: number = 3
+    //定义碰撞的半径长度
+    private sumOfRadii: number = 110
 
     //初始化倒计时的Label
     private showTime: cc.Node = null
+
+    //第二关是否开始
+    private isTwo: boolean = false;
+
+
 
 
     onLoad() {
@@ -95,26 +102,69 @@ export default class Btn_GD extends cc.Component {
 
         this.dataList = this.node.getComponent(DataList)
         this.audioUtils = this.node.getComponent(audioUtils)
-        this.audioUtils.onClickBgm1FadeIn()
 
 
+    }
+
+    startGame(){
+        //暂停游戏
+        this.node.pauseSystemEvents(true);
+        //开始倒计时
+        let countdown = 3; // 初始倒计时时间
+        let StartLabel = this.node.getChildByName("Start").getChildByName("startNum").getComponent(cc.Label)
+
+        this.node.getChildByName("Start").active = true
+
+        StartLabel.string = "Ready.."; // 更新 Label 显示的倒计时数字
+        // 执行字体动画
+        const scaleAction = cc.scaleTo(0.7, 0.7); // 缩放动画，从原始大小缩放至 0.5 倍
+        StartLabel.node.runAction(scaleAction);
+        setTimeout(() => {
+            StartLabel.string = ""
+            StartLabel.node.scale = 1
+        }, 900); // 0.5秒 = 500毫秒
+
+        setTimeout(() => {
+            //播放倒计时音效
+            this.audioUtils.onClickSfx1("sfx_321")
+        }, 1000); // 0.5秒 = 500毫秒
+        this.schedule(() => {
+            if (countdown > 0) {
+                StartLabel.string = countdown.toString(); // 更新 Label 显示的倒计时数字
+                // 执行字体动画
+                const scaleAction = cc.scaleTo(0.7, 0.7); // 缩放动画，从原始大小缩放至 0.5 倍
+                StartLabel.node.runAction(scaleAction);
+                countdown--;
+            } else {
+                //恢复游戏
+                this.node.resumeSystemEvents(true);
+                this.node.getChildByName("Start").active = false
+                this.unscheduleAllCallbacks(); // 停止定时器
+                this.onCountdownEnd(); // 倒计时结束后执行其他方法
+            }
+            setTimeout(() => {
+                StartLabel.string = ""
+                StartLabel.node.scale = 1
+            }, 900); // 0.5秒 = 500毫秒
+        }, 1, 3); // 1 秒间隔，重复 3 次
+    }
+
+    onCountdownEnd() {
+        // 倒计时结束后执行的其他方法
         //初始化倒计时的Label
         this.showTime = this.node.getChildByName("Level").getChildByName("showTime")
 
 
         //初始化第一关数据
         this.initDate(this.dataList.firstData.firstNumber, this.dataList.firstData.leveTitle, this.dataList.firstData.GD_number, 1)
-
-
         //初始化背景音乐
-        // this.onClickBgm1FadeIn()
-
-
-
+        this.audioUtils.onClickBgm1FadeIn()
     }
 
-    start() {
 
+    start() {
+        //开始游戏
+        this.startGame()
 
     }
 
@@ -155,7 +205,7 @@ export default class Btn_GD extends cc.Component {
                         console.log("碰撞提醒：物体已碰撞！");
                         // 播放碰撞声音
                         // cc.audioEngine.playEffect(this.collisionSound, false);
-                        Layer.inst.showTip({text: "碰撞提醒：物体已碰撞！", end: cc.v2(0, 100), duration: 0});
+                        // Layer.inst.showTip({text: "碰撞提醒：物体已碰撞！", end: cc.v2(0, 100), duration: 0});
                     }
                 }
 
@@ -165,9 +215,19 @@ export default class Btn_GD extends cc.Component {
                     if (connectedNodes.length >= 3) {
 
                         for (let node of connectedNodes) {
-
-                            this.triggerExplosionAt(node)
+                            //1、消除特效-变亮
+                            node.getComponent('ShaderShining').speed = 3.5
                         }
+                        setTimeout(() => {
+                            // //消除的音效
+                            this.audioUtils.onClickSfx1("sfx_xiaochu01")
+                            for (let node of connectedNodes) {
+                                if (node.name=="gd"){
+                                    this.triggerExplosionAt(node)
+                                }
+                            }
+                            connectedNodes = null
+                        }, 500); // 0.5秒 = 500毫秒
 
                         // 可以在这里添加声音提示和日志记录
                         // Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
@@ -184,7 +244,7 @@ export default class Btn_GD extends cc.Component {
         const posB = nodeB.getComponent("LFMeshSprite").centerPos
         const deltaX = Math.abs(posA.x - posB.x);
         const deltaY = Math.abs(posA.y - posB.y);
-        const sumOfRadii = 100;
+        const sumOfRadii = this.sumOfRadii;
         if (Math.sqrt(deltaX * deltaX + deltaY * deltaY) <= sumOfRadii) {
 
             if (!bool) {
@@ -365,23 +425,28 @@ export default class Btn_GD extends cc.Component {
 
     // 触发爆炸效果的函数
     triggerExplosionAt(node: cc.Node) {
-        //1、消除特效-变亮
-
-
-
-        //3、消除特效-爆炸
-
-
-        //2、消除特效-缩小
-
-
-
-        //消除
+        // //消除
         this.destroyMergeObjNode(node);
+
         //4、消除特效-果冻浆收集
         this.playAnim(node)
 
+        //判断是否达到第二关
+        if (!this.isTwo&&(this.animLab.endValue+5 >= Number(this.dataList.firstData.firstNumber))){
+            //第二关开始
+            this.isTwo = true
 
+            //第二关动画
+            this.TwoLevel()
+
+            //第二关数据初始化
+            this.scheduleOnce(function(){
+                //初始化第二关
+                this.initDate(this.dataList.secondData.endNumber, this.dataList.secondData.leveTitle, this.dataList.secondData.GD_number, 2)
+            },2.8)
+
+
+        }
     }
 
 
@@ -444,6 +509,8 @@ export default class Btn_GD extends cc.Component {
         });
         //缓动分数
         this.animLab.setValue(this.animLab.endValue + 5);
+
+
     }
 
     /**
@@ -473,6 +540,7 @@ export default class Btn_GD extends cc.Component {
         if (levelNumber == 1) {
             this.GD_YB.active = false
             this.lastCollisionTime = 0; // 上次碰撞发生的时间
+            this.animLab.getComponent(cc.Label).string = "0";
             //初始化倒计时
             this.countDownTime(this.dataList.firstData.firstLevelTime, 0)
         } else {
@@ -528,11 +596,16 @@ export default class Btn_GD extends cc.Component {
                         if (fenzhong == 0 && miaoshu == 0) {
                             //判断分数是否达到
                             if (this.animLab.endValue >= Number(this.dataList.firstData.firstNumber)) {
-                                Layer.inst.showTip({ text: "难度提升~", unique: true, end: cc.v2(0, 100) });
+                                //第二关动画
+                                this.TwoLevel()
+
+                                //第二关开始
+                                this.isTwo = true
+
                                 this.scheduleOnce(function(){
                                     //初始化第二关
                                     this.initDate(this.dataList.secondData.endNumber, this.dataList.secondData.leveTitle, this.dataList.secondData.GD_number, 2)
-                                },0.5)
+                                },2.8)
                                 console.log("初始化第二关")
                             } else {
                                 //停止倒计时的动作
@@ -633,6 +706,43 @@ export default class Btn_GD extends cc.Component {
             return true
         }
         return false
+    }
+
+    //第二关动画
+    TwoLevel(){
+        let countdown = 1
+        let StartLabel = this.node.getChildByName("Start").getChildByName("startNum").getComponent(cc.Label)
+
+        StartLabel.fontSize = 70
+        this.node.getChildByName("Start").active = true
+        StartLabel.string = " 恭喜第一关通过！"; // 更新 Label 显示的倒计时数字
+        // 执行字体动画
+        const scaleAction = cc.scaleTo(0.7, 0.7); // 缩放动画，从原始大小缩放至 0.5 倍
+        StartLabel.node.runAction(scaleAction);
+        setTimeout(() => {
+            StartLabel.string = ""
+            StartLabel.node.scale = 1
+        }, 800); // 0.5秒 = 500毫秒
+        this.schedule(() => {
+            if (countdown > 0) {
+                StartLabel.string = "第二关难度上升~"; // 更新 Label 显示的倒计时数字
+                // 执行字体动画
+                const scaleAction = cc.scaleTo(0.7, 0.7); // 缩放动画，从原始大小缩放至 0.5 倍
+                StartLabel.node.runAction(scaleAction);
+                countdown--;
+            } else {
+                this.node.getChildByName("Start").active = false
+                StartLabel.string = ""
+                StartLabel.node.scale = 1
+                StartLabel.fontSize = 120
+            }
+            setTimeout(() => {
+                StartLabel.string = ""
+                StartLabel.node.scale = 1
+            }, 800); // 0.5秒 = 500毫秒
+
+        }, 0.9, 2); // 1 秒间隔，重复 3 次
+
     }
 
 }

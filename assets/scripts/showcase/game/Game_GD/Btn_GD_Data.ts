@@ -19,7 +19,7 @@ export default class Btn_GD_Data extends cc.Component {
             //初始化第一关倒计时
             firstLevelTime: 60,
             //初始化第一关的目标分数
-            firstNumber:"200",
+            firstNumber:"100",
             //初始化果冻数
             GD_number:5,
             //初始化关卡标题

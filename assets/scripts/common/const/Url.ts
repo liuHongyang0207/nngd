@@ -23,7 +23,9 @@ export const ResUrl = {
         SFX_UI: "audio/sfxUi",
         lose: "audio/sound_lose",
         countDown: "audio/countdown",
-        click: "audio/sound_click"
+        click: "audio/sound_click",
+        sfx_xiaochu01: "audio/sfx_xiaochu01",
+        sfx_321: "audio/321"
     },
     MATERIAL:{
         // FG_MATERIAL:"textures/specular_gloss/Specular_gloss"

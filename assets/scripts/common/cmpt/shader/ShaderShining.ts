@@ -8,7 +8,7 @@ const { ccclass, property, menu, disallowMultiple, executeInEditMode } = cc._dec
 @menu("Framework/Shader/ShaderShining")
 export default class ShaderShining extends cc.Component {
     @property({ tooltip: CC_DEV && "流光速度" })
-    public speed: number = 1;
+    public speed: number = 0;
     @property({ tooltip: CC_DEV && "流光斜率" })
     public slope: number = 1;
     @property({ tooltip: CC_DEV && "流光宽度", range: [0, Number.MAX_SAFE_INTEGER] })
