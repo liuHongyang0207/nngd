@@ -29,17 +29,17 @@ export default class Btn_GD extends cc.Component {
     //预生成的果冻
     @property(cc.Node)
     GD_YB = null
-
+    //金币
     @property(cc.Prefab)
     coinPrefab = null
+
     coinPool: cc.NodePool = null;
 
     //渐变数字
     @property(AnimValueLabel)
     public animLab: AnimValueLabel = null;
 
-    //渐变数字
-
+    //音乐类
     public audioUtils: audioUtils = null;
 
     //预生成的粒子
