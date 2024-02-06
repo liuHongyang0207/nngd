@@ -425,7 +425,7 @@
       "__id__": 1
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 14
@@ -488,7 +488,7 @@
     "node": {
       "__id__": 13
     },
-    "_enabled": true,
+    "_enabled": false,
     "bubblePrefab": {
       "__uuid__": "c82fa8b8-d721-40ef-babe-913f9d12f4ea"
     },

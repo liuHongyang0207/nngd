@@ -15,9 +15,6 @@ export default class LFMeshSprite extends cc.Component {
 
     sprite:cc.Sprite=null;
 
-    //sprite对象
-    //public sprite:cc.Sprite=null;
-
     //精灵mesh顶点
     public vertices=null;
 
@@ -37,11 +34,10 @@ export default class LFMeshSprite extends cc.Component {
     //sprite纹理宽度
     public static spriteWidth=514;
 
-    //物理group的 startIdx, endIdx
-    //public groupStartIdx:number=0;
-    //public groupEndIdx:number=0;
-
-    // LIFE-CYCLE CALLBACKS:
+    // 缓存的变量，用于减少重复创建对象
+    private tempWorldPos: cc.Vec2 = cc.v2(0, 0);
+    private tempNodePos: cc.Vec2 = cc.v2(0, 0);
+    private tempStartToEnd: cc.Vec2 = cc.v2(0, 0);
 
     onLoad ()
     {
@@ -53,11 +49,11 @@ export default class LFMeshSprite extends cc.Component {
         this.sprite.spriteFrame.vertices={};
         this.vertices=this.sprite.spriteFrame.vertices;
 
-        this.sprite.spriteFrame.vertices.x=[];
-        this.sprite.spriteFrame.vertices.y=[];
-        this.sprite.spriteFrame.vertices.nu=[];
-        this.sprite.spriteFrame.vertices.nv=[];
-        this.sprite.spriteFrame.vertices.triangles=[];
+        this.vertices.x = [];
+        this.vertices.y = [];
+        this.vertices.nu = [];
+        this.vertices.nv = [];
+        this.vertices.triangles = [];
 
     }
 
@@ -70,102 +66,89 @@ export default class LFMeshSprite extends cc.Component {
         this.sprite.setVertsDirty();
     }
 
-    /*
-    public applyForce()
-    {
-        if(this.lfGroup!==null)
-        {
-            this.lfGroup.ApplyForce(new LiquidFun.b2Vec2(0, 4.2));
-        }
-    }*/
 
-    update (dt)
-    {
-        if(this.node.width<=0 || this.node.height<=0)
+    update(dt) {
+        if (this.node.width <= 0 || this.node.height <= 0 || this.stopUpdate)
             return;
 
-        if(this.lfGroup!==null && this.vertices!==null && this.mergeObj!==null && !this.stopUpdate)
-        {
-            let linePointsNum:number=this.mergeObj.softBodyKeyPointsPerLine;
-            let spriteWidth:number=this.mergeObj.spriteWidth;
+        if (this.lfGroup !== null && this.vertices !== null && this.mergeObj !== null) {
+            const linePointsNum = this.mergeObj.softBodyKeyPointsPerLine;
+            const spriteWidth = this.mergeObj.spriteWidth;
+            const particleSystem = LFParticleSystem.instance.particleSystem;
+            const particles = particleSystem.GetPositionBuffer();
+            const scale = PhysicManager.scale;
+            const halfSpriteWidth = spriteWidth * 0.5;
+            const lfMeshSpriteWidth = LFMeshSprite.spriteWidth / spriteWidth;
+            // 基于当前粒子数预分配顶点数组长度
+            const particleCount = this.lfGroup.m_lastIndex - this.lfGroup.m_firstIndex;
+            if (this.vertices.x.length !== particleCount) {
+                this.vertices.x.length = particleCount;
+                this.vertices.y.length = particleCount;
+                this.vertices.nu.length = particleCount;
+                this.vertices.nv.length = particleCount;
+            }
 
-            let particleSystem=LFParticleSystem.instance.particleSystem;
-            let particles=particleSystem.GetPositionBuffer();
+            for (let i = this.lfGroup.m_firstIndex; i < this.lfGroup.m_lastIndex; i++) {
+                const idx = i - this.lfGroup.m_firstIndex;
+                if (particles[i]) {
+                    this.tempWorldPos.x = particles[i].x * scale;
+                    this.tempWorldPos.y = particles[i].y * scale;
+                    // 将物理坐标转换为精灵的本地坐标
+                    this.tempNodePos = this.node.convertToNodeSpaceAR(this.tempWorldPos);
+                    // 计算顶点位置和纹理坐标
+                    let xpos = (this.tempNodePos.x + halfSpriteWidth) * lfMeshSpriteWidth;
+                    let ypos = (-this.tempNodePos.y + halfSpriteWidth) * lfMeshSpriteWidth;
+                    let nu = (idx % linePointsNum) / (linePointsNum - 1);
+                    let nv = 1 - Math.floor(idx / linePointsNum) / (linePointsNum - 1);
+                    // 使用索引访问和分配顶点数据
+                    this.vertices.x[idx] = xpos;
+                    this.vertices.y[idx] = ypos;
+                    this.vertices.nu[idx] = nu;
+                    this.vertices.nv[idx] = nv;
 
-            // clear vertices
-            this.vertices.x.splice(0, this.vertices.x.length);
-            this.vertices.y.splice(0, this.vertices.y.length);
-            this.vertices.nu.splice(0, this.vertices.nu.length);
-            this.vertices.nv.splice(0, this.vertices.nv.length);
-            this.vertices.triangles.splice(0, this.vertices.triangles.length);
-
-            //遍历对应particleGroup的物理关键点
-            for(let i=this.lfGroup.m_firstIndex;i<this.lfGroup.m_lastIndex;i++)
-            {
-                if(!!particles[i])
-                {
-                    //取物理点坐标
-                    let x = (particles[i].x) * PhysicManager.scale;
-                    let y = (particles[i].y) * PhysicManager.scale;
-
-                    if(i===this.lfGroup.m_firstIndex)
-                    {
-                        this.firstPos.x=x;
-                        this.firstPos.y=y;
+                    // 更新 firstPos 和 lastPos
+                    if (i === this.lfGroup.m_firstIndex) {
+                        this.firstPos.x = this.tempWorldPos.x;
+                        this.firstPos.y = this.tempWorldPos.y;
+                    } else if (i === this.lfGroup.m_lastIndex - 1) {
+                        this.lastPos.x = this.tempWorldPos.x;
+                        this.lastPos.y = this.tempWorldPos.y;
                     }
-                    else if(i===this.lfGroup.m_lastIndex-1)
-                    {
-                        this.lastPos.x=x;
-                        this.lastPos.y=y;
-                    }
-
-                    let worldPos = cc.v2(x, y);
-
-                    //转到父节点本地坐标系
-                    let nodePos = this.node.convertToNodeSpaceAR(worldPos);
-
-                    let xpos:number=(nodePos.x  + spriteWidth*0.5 ) * (LFMeshSprite.spriteWidth/spriteWidth);
-                    let ypos:number=(-nodePos.y  + spriteWidth*0.5 ) * (LFMeshSprite.spriteWidth/spriteWidth);
-
-                    //填充顶点
-                    this.vertices.x.push(xpos);
-                    this.vertices.y.push(ypos);
-
-                    //填充uv
-                    let idx:number=i - this.lfGroup.m_firstIndex;
-                    this.vertices.nu.push((idx % linePointsNum) / (linePointsNum-1) );
-                    this.vertices.nv.push(1-Math.floor(idx / linePointsNum) / (linePointsNum-1));
-
                 }
             }
 
-            //更新centerPos
-            let startToEnd=this.lastPos.sub(this.firstPos);
-            let dir=startToEnd.normalize();
-            let mag:number=startToEnd.mag();
-            this.centerPos=this.firstPos.add(dir.multiplyScalar(mag * 0.5));
+            // 使用 firstPos 和 lastPos 计算中心位置
+            this.tempStartToEnd.x = this.lastPos.x - this.firstPos.x;
+            this.tempStartToEnd.y = this.lastPos.y - this.firstPos.y;
+            let mag = this.tempStartToEnd.mag();
+            this.tempStartToEnd.normalizeSelf().multiplyScalar(mag * 0.5);
+            this.centerPos.x = this.firstPos.x + this.tempStartToEnd.x;
+            this.centerPos.y = this.firstPos.y + this.tempStartToEnd.y;
 
-            let localCenter=this.node.convertToNodeSpaceAR(this.centerPos);
-            if(this.node.childrenCount>0)
-            {
-                this.node.children[0].setPosition(localCenter.x, localCenter.y + this.node.width*0.5 + 20);
+            // 转换为本地坐标并更新子节点位置（如果有的话）
+            let localCenter = this.node.convertToNodeSpaceAR(this.centerPos);
+            if (this.node.childrenCount > 0) {
+                this.node.children[0].setPosition(localCenter.x, localCenter.y + this.node.width * 0.5 + 20);
             }
 
-            //顶点索引
-            for(let j=0;j<linePointsNum-1;j++)
-            {
-                let startIdx:number=j*linePointsNum;
-                for(let i=0;i<linePointsNum-1;i++)
-                {
-                    this.vertices.triangles.push(startIdx+i);
-                    this.vertices.triangles.push(startIdx+i+1);
-                    this.vertices.triangles.push(startIdx+i+1+linePointsNum);
-
-                    this.vertices.triangles.push(startIdx+i+1+linePointsNum);
-                    this.vertices.triangles.push(startIdx+i+linePointsNum);
-                    this.vertices.triangles.push(startIdx+i);
+            // 填充三角形索引数组
+            if (this.vertices.triangles.length !== (linePointsNum - 1) * (linePointsNum - 1) * 6) {
+                this.vertices.triangles = new Array((linePointsNum - 1) * (linePointsNum - 1) * 6);
+            }
+            let triIdx = 0;
+            for (let j = 0; j < linePointsNum - 1; j++) {
+                let startIdx = j * linePointsNum;
+                for (let i = 0; i < linePointsNum - 1; i++) {
+                    this.vertices.triangles[triIdx++] = startIdx + i;
+                    this.vertices.triangles[triIdx++] = startIdx + i + 1;
+                    this.vertices.triangles[triIdx++] = startIdx + i + 1 + linePointsNum;
+                    this.vertices.triangles[triIdx++] = startIdx + i + 1 + linePointsNum;
+                    this.vertices.triangles[triIdx++] = startIdx + i + linePointsNum;
+                    this.vertices.triangles[triIdx++] = startIdx + i;
                 }
             }
+
+            // 更新顶点数据
             this.syncVertices();
         }
     }

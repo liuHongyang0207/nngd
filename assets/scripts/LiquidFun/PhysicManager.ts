@@ -92,7 +92,7 @@ export default class PhysicManager extends cc.Component
     //创建软体物理
     public static createSoftBodyGroup(spriteWidth:number, worldPos:cc.Vec2)
     {
-        LiquidFun.b2Contact.SetEnabled = true
+        // LiquidFun.b2Contact.SetEnabled = true
 
         let groupDef=new LiquidFun.b2ParticleGroupDef();
 

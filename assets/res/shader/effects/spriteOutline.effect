@@ -88,7 +88,7 @@ CCProgram fs %{
     return left + right + top + bottom;
   }
 
-  // 内描边 上下左右alpha全不为0时返回1，否则返回0
+  // 内描边 上下左右alpha全为0时返回1，否则返回0
   float getInnerAlpha(sampler2D texture, vec2 uv) {
     float right = texture2D(texture, uv + vec2(outlineInfo.z / outlineInfo.x, 0.0)).a * checkEdge(0.0, 1.0, uv.x + outlineInfo.z / outlineInfo.x);
     float left = texture2D(texture, uv - vec2(outlineInfo.z / outlineInfo.x, 0.0)).a * checkEdge(0.0, 1.0, uv.x - outlineInfo.z / outlineInfo.x);

@@ -21,6 +21,7 @@ export default class Btn_GD_Data extends cc.Component {
             //初始化第一关的目标分数
             firstNumber:"100",
             //初始化果冻数
+            // GD_number:1,
             GD_number:5,
             //初始化关卡标题
             leveTitle:"第一关",
@@ -29,7 +30,7 @@ export default class Btn_GD_Data extends cc.Component {
         this.secondData = {
             //初始化第二关的目标分数
             endNumber:"2000",
-            GD_number:7,
+            GD_number:9,
             leveTitle:"第二关",
         }
         this.otherData = {

@@ -1,5 +1,5 @@
 {
-  "last-module-event-record-time": 1706800825272,
+  "last-module-event-record-time": 1707027440020,
   "group-list": [
     "default"
   ],
@@ -9,7 +9,20 @@
     ]
   ],
   "excluded-modules": [
+    "Collider",
+    "DragonBones",
+    "EditBox",
+    "Graphics",
+    "Geom Utils",
+    "Intersection",
+    "Mask",
     "Native Socket",
+    "Physics",
+    "ParticleSystem",
+    "RichText",
+    "ScrollView",
+    "sp.Skeleton",
+    "StudioComponent",
     "TiledMap",
     "VideoPlayer",
     "3D",

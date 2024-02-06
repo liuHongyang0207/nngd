@@ -8,7 +8,7 @@ const { ccclass, property, menu, disallowMultiple, executeInEditMode } = cc._dec
 @menu("Framework/Shader/ShaderShining")
 export default class ShaderShining extends cc.Component {
     @property({ tooltip: CC_DEV && "流光速度" })
-    public speed: number = 0;
+    public speed: number = 4;
     @property({ tooltip: CC_DEV && "流光斜率" })
     public slope: number = 1;
     @property({ tooltip: CC_DEV && "流光宽度", range: [0, Number.MAX_SAFE_INTEGER] })
@@ -16,7 +16,7 @@ export default class ShaderShining extends cc.Component {
     @property({ tooltip: CC_DEV && "流光强度", range: [0, Number.MAX_SAFE_INTEGER] })
     public strength: number = 2;
     @property({ tooltip: CC_DEV && "两次流光动画之间的间隔时间", range: [0, Number.MAX_SAFE_INTEGER] })
-    public interval: number = 1;
+    public interval: number = 0;
     @property({ tooltip: CC_DEV && "流光速度是否受到timeScale的影响" })
     public timeScale: boolean = false;
 
