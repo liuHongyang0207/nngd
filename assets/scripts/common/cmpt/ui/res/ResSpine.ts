@@ -10,26 +10,26 @@ const { ccclass, menu, disallowMultiple, requireComponent } = cc._decorator;
  */
 @ccclass
 @disallowMultiple
-@requireComponent(sp.Skeleton)
+@requireComponent(cc.RenderComponent)
 @menu("Framework/UI组件/ResSpine")
 export default class ResSpine extends cc.Component {
     // 动态加载的资源
-    private _asset: sp.SkeletonData = null;
+    private _asset: cc.Asset = null;
 
     private _url: string = "";
 
-    private _spine: sp.Skeleton = null;
-    private get spine(): sp.Skeleton {
+    private _spine: cc.RenderComponent = null;
+    private get spine(): cc.RenderComponent {
         if (!this._spine) {
-            this._spine = this.getComponent(sp.Skeleton);
+            this._spine = this.getComponent(cc.RenderComponent);
         }
         return this._spine;
     }
 
-    public get skeletonData(): sp.SkeletonData {
+    public get skeletonData(): cc.Asset {
         return this.spine.skeletonData;
     }
-    public set skeletonData(v: sp.SkeletonData) {
+    public set skeletonData(v: cc.Asset) {
         if (!this.isValid || this.spine.skeletonData === v) {
             return;
         }
@@ -49,9 +49,9 @@ export default class ResSpine extends cc.Component {
      */
     public async setSkeletonData(url: string): Promise<void> {
         this._url = url;
-        let result = Res.get(url, sp.SkeletonData) || await Res.load(url, sp.SkeletonData);
+        let result = Res.get(url, cc.Asset) || await Res.load(url, cc.Asset);
         // 如短时间内多次调用，需保证使用最后一次加载的资源
-        if (result instanceof sp.SkeletonData && this._url === url) {
+        if (result instanceof cc.Asset && this._url === url) {
             this.skeletonData = result;
         }
     }

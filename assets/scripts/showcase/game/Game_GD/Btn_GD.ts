@@ -215,8 +215,7 @@ export default class Btn_GD extends cc.Component {
                     if (connectedNodes.length >= 3) {
 
                         for (let node of connectedNodes) {
-                            //1、消除特效-变亮
-                            node.getComponent('ShaderShining').speed = 3.5
+                            node.addComponent("ShaderShining");
                         }
                         setTimeout(() => {
                             // //消除的音效

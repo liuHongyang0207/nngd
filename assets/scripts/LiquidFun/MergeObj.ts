@@ -12,7 +12,7 @@ export default class MergeObj extends cc.Component {
     public spriteWidth:number=80;
 
     //等级对应的软体每行关键点数量
-    public softBodyKeyPointsPerLine:number=15;
+    public softBodyKeyPointsPerLine:number=2;
 
     public mergeFlag:boolean=false;
 
@@ -32,7 +32,7 @@ export default class MergeObj extends cc.Component {
     {
         this.level=0;
         this.spriteWidth=80;
-        this.softBodyKeyPointsPerLine=15
+        this.softBodyKeyPointsPerLine=2
         this.mergeFlag=false;
         this.mergeTarget=null;
         this.inited=false;
