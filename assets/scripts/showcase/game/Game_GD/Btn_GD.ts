@@ -83,6 +83,12 @@ export default class Btn_GD extends cc.Component {
     //第二关是否开始
     private isTwo: boolean = false;
 
+    //用于记录已经检查过的节点
+    private visited = new Set();
+
+    //加一个消除的锁
+    private isDelete = false
+
 
 
 
@@ -168,73 +174,79 @@ export default class Btn_GD extends cc.Component {
 
     }
 
+    // 深度优先搜索函数
+    private dfs = (node, nodes) => {
+        this.visited.add(node.uuid); // 标记当前节点为已访问
+        let connectedNodes = [node]; // 存储与当前节点相连的所有节点
+        for (let i = 4; i < nodes.length; i++) {
+            if (node !== nodes[i] && nodes[i]._name === "gd" && !this.visited.has(nodes[i].uuid)) {
+                if (this.verifyCollision(node, nodes[i], true)) {
+                    connectedNodes = connectedNodes.concat(this.dfs(nodes[i], nodes));
+                }
+            }
+        }
+        return connectedNodes;
+    };
 
     update(dt) {
         let downs = this.DownNode.children;
         let downsLength = downs.length;
-        let visited = new Set(); // 用于记录已经检查过的节点
-
         if (downsLength > 4) {
-
-
-            // 深度优先搜索函数
-            const dfs = (node, nodes) => {
-                visited.add(node.uuid); // 标记当前节点为已访问
-                let connectedNodes = [node]; // 存储与当前节点相连的所有节点
-                for (let i = 4; i < nodes.length; i++) {
-                    if (node !== nodes[i] && nodes[i]._name === "gd" && !visited.has(nodes[i].uuid)) {
-                        if (this.verifyCollision(node, nodes[i], true)) {
-                            connectedNodes = connectedNodes.concat(dfs(nodes[i], nodes));
-                        }
-                    }
-                }
-                return connectedNodes;
-            };
             // 检查所有节点
-            var lastElement = downs[downsLength - 1]
+            // var lastElement = downs[downsLength - 1]
             for (let i = 4; i < downs.length; i++) {
                 //明天继续判断怎么实现碰撞出声音
-                if (i < downsLength - 1) {
-                    var bool = this.verifyCollision(lastElement, downs[i], false)
-                    let currentTime = Date.now();
-                    // 检查是否碰撞以及是否超过冷却时间
-                    if (bool && (currentTime - this.lastCollisionTime) > this.collisionCooldown * 1000 && this.collisionCount < this.maxCollisions) {
-                        this.lastCollisionTime = currentTime; // 更新上次碰撞时间
-                        // 增加碰撞次数
-                        this.collisionCount++;
-                        console.log("碰撞提醒：物体已碰撞！");
-                        // 播放碰撞声音
-                        // cc.audioEngine.playEffect(this.collisionSound, false);
-                        // Layer.inst.showTip({text: "碰撞提醒：物体已碰撞！", end: cc.v2(0, 100), duration: 0});
-                    }
-                }
+                // if (i < downsLength - 1) {
+                //     var bool = this.verifyCollision(lastElement, downs[i], false)
+                //     let currentTime = Date.now();
+                //     // 检查是否碰撞以及是否超过冷却时间
+                //     if (bool && (currentTime - this.lastCollisionTime) > this.collisionCooldown * 1000 && this.collisionCount < this.maxCollisions) {
+                //         this.lastCollisionTime = currentTime; // 更新上次碰撞时间
+                //         // 增加碰撞次数
+                //         this.collisionCount++;
+                //         console.log("碰撞提醒：物体已碰撞！");
+                //         // 播放碰撞声音
+                //         // cc.audioEngine.playEffect(this.collisionSound, false);
+                //         // Layer.inst.showTip({text: "碰撞提醒：物体已碰撞！", end: cc.v2(0, 100), duration: 0});
+                //     }
+                // }
 
-                if (!visited.has(downs[i].uuid)) {
-                    let connectedNodes = dfs(downs[i], downs);
+                // if (!visited.has(downs[i].uuid)) {
+                    //清空set，因为要重新计算是否有相交
+                    this.visited.clear()
+                    let connectedNodes = this.dfs(downs[i], downs);
                     // 如果相连的节点数大于等于3，则删除这些节点
                     if (connectedNodes.length >= 3) {
-
-                        for (let node of connectedNodes) {
-                            node.addComponent("ShaderShining");
+                        if (!this.isDelete){
+                            this.deletes(connectedNodes)
                         }
-                        setTimeout(() => {
-                            // //消除的音效
-                            this.audioUtils.onClickSfx1("sfx_xiaochu01")
-                            for (let node of connectedNodes) {
-                                if (node.name=="gd"){
-                                    this.triggerExplosionAt(node)
-                                }
-                            }
-                            connectedNodes = null
-                        }, 500); // 0.5秒 = 500毫秒
-
                         // 可以在这里添加声音提示和日志记录
                         // Layer.inst.showTip({ text: "需要出声音!", end: cc.v2(0, 100), duration: 0 });
                         // console.log("碰撞了并且删除了" + connectedNodes.length + "个方块！");
                     }
-                }
+                // }
             }
         }
+    }
+
+    //消除的方法
+    deletes(connectedNodes){
+        this.isDelete = true
+        for (let node of connectedNodes) {
+            node.addComponent("ShaderShining");
+        }
+        setTimeout(() => {
+            // //消除的音效
+            this.audioUtils.onClickSfx1("sfx_xiaochu01")
+            for (let node of connectedNodes) {
+                if (node.name=="gd"){
+                    this.triggerExplosionAt(node)
+                    console.log("删除")
+                }
+            }
+            connectedNodes = null
+            this.isDelete = false
+        }, 500); // 0.5秒 = 500毫秒
     }
 
     //校验两个物体碰撞的算法
@@ -263,18 +275,20 @@ export default class Btn_GD extends cc.Component {
         if (!this.boolPos(event.getLocation(),this.DownNode)){
             return;
         }
-
-        if (this.isTime) {
-            Layer.inst.showTip({text: "点击太快啦！", end: cc.v2(0, 100), duration: 0});
-            this.isStart = true
-            return
+        //获取最后一个果冻，判断是否已经越过生成的线，避免两个果冻生成碰撞
+        let downs = this.DownNode.children;
+        let downsLength = downs.length;
+        if (downsLength > 4) {
+            if ( this.getChu(downs[downsLength-1])) {
+                Layer.inst.showTip({text: "点击太快啦！", end: cc.v2(0, 100), duration: 0});
+                this.isStart = true
+                return
+            }
         }
-        console.log("点击成功")
         this.isStart = false
         this.GD_YB.active = true
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
-        // this.getGD(touchPoint);
 
         this.getGD_YB(this.getPositions(touchPoint));
     }
@@ -286,16 +300,11 @@ export default class Btn_GD extends cc.Component {
             return;
         }
 
-        // //判断是否在有效范围内生成果冻
-        // if (!this.boolPos(event.getLocation(),this.DownNode)){
-        //     return;
-        // }
         if (this.isStart) {
             return
         }
 
         let touchPoint = event.getLocation();
-        // console.log("移动1："+touchPoint)
 
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
         this.GD_YB.setPosition(this.getPositions(touchPoint).x, 330);
@@ -309,14 +318,9 @@ export default class Btn_GD extends cc.Component {
             return;
         }
 
-        // //判断是否在有效范围内生成果冻
-        // if (!this.boolPos(event.getLocation(),this.DownNode)){
-        //     return;
-        // }
         if (this.isStart) {
             return
         }
-        this.getTime()
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
@@ -331,14 +335,10 @@ export default class Btn_GD extends cc.Component {
         if (this.GD_YB.active==false){
             return;
         }
-        //判断是否在有效范围内生成果冻
-        // if (!this.boolPos(event.getLocation(),this.DownNode)){
-        //     return;
-        // }
+
         if (this.isStart) {
             return
         }
-        this.getTime()
         this.GD_YB.active = false
         let touchPoint = event.getLocation();
         touchPoint = this.DownNode.convertToNodeSpaceAR(touchPoint)
@@ -396,12 +396,9 @@ export default class Btn_GD extends cc.Component {
         return touchPoint
     }
 
-    getTime() {
-        this.isTime = true
-        this.scheduleOnce(() => {
-            // 在这里写点击事件的处理逻辑
-            this.isTime = false
-        }, this.clickInterval);
+    //判断是否碰撞
+    getChu(nodeA){
+        return  nodeA.getComponent("LFMeshSprite").centerPos.y > 867
     }
 
     onDestroy() {
